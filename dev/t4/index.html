@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>WebRTC Data Channel</title>
+  </head>
+
+<body>
+  <textarea id="dataChannelSend" placeholder="Type some text here..." disabled></textarea>
+  <textarea id="dataChannelReceive" placeholder="Received data will appear here..." disabled></textarea>
+  <button id="startButton">Start</button>
+  <button id="sendButton" disabled>Send</button>
+  <button id="closeButton" disabled>Close</button>
+
+  <script>
+
+    
+// シグナリングサーバへ接続する
+const wsUrl = 'ws://yiersan.link:3000/';
+const ws = new WebSocket(wsUrl);
+ws.onopen = function(evt) {
+    console.log('ws open()');
+    
+    
+
+
+// 创建 PeerConnection
+const peerConnection = new RTCPeerConnection({
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' }
+  ]
+});
+
+
+
+// 处理 ICE 候选者
+peerConnection.onicecandidate = event => {
+  if (event.candidate) {
+    // 将候选者发送到信令服务器
+    console.log('将候选者发送到信令服务器');
+    sendToSignalingServer({
+      type: 'candidate',
+      candidate: event.candidate
+    });
+  }
+};
+
+// 处理远端流
+peerConnection.ontrack = event => {
+  const [remoteStream] = event.streams;
+  const remoteVideo = document.getElementById('remoteVideo');
+  remoteVideo.srcObject = remoteStream;
+};
+
+/*
+// 获取本地媒体流
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+  .then(stream => {
+    // 将本地流添加到 PeerConnection
+    stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+
+    const localVideo = document.getElementById('localVideo');
+    localVideo.srcObject = stream;
+  })
+  .catch(error => console.error('Error accessing media devices.', error));
+*/
+
+// 创建和发送 offer
+peerConnection.createOffer()
+  .then(offer => {
+    console.log('创建 offer');
+    console.log(offer);
+    return peerConnection.setLocalDescription(offer);
+  })
+  .then(() => {
+    // 将 offer 发送到信令服务器
+    console.log('将 offer 发送到信令服务器');
+    //console.log(offer);
+    sendToSignalingServer({
+      type: 'offer',
+      sdp: peerConnection.localDescription
+    });
+  })
+  .catch(error => console.error('Error creating offer.', error));
+
+
+// 处理信令消息
+function handleSignalingMessage(message) {
+    console.log('处理信令消息');
+    console.log(message);
+  if (message.type === 'offer') {
+    peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp))
+      .then(() => peerConnection.createAnswer())
+      .then(answer => peerConnection.setLocalDescription(answer))
+      .then(() => {
+        // 将 answer 发送到信令服务器
+        sendToSignalingServer({
+          type: 'answer',
+          sdp: peerConnection.localDescription
+        });
+      })
+      .catch(error => console.error('Error handling offer.', error));
+  } else if (message.type === 'answer') {
+    peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp))
+      .catch(error => console.error('Error setting remote description.', error));
+  } else if (message.type === 'candidate') {
+    peerConnection.addIceCandidate(new RTCIceCandidate(message.candidate))
+      .catch(error => console.error('Error adding ICE candidate.', error));
+  }
+}
+
+// 发送消息到信令服务器的示例函数
+function sendToSignalingServer(message) {
+    console.log(message);
+  // 具体的信令服务器实现需要自行编写，如通过 WebSocket 发送消息
+  ws.send(JSON.stringify(message));
+}
+
+    };
+ws.onerror = function(err) {
+    console.error('ws onerror() ERR:', err);
+};
+  </script>
+</body>
+
+</html>

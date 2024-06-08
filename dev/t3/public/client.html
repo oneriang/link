@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebRTC Text Messaging</title>
+  <style>
+    #messages {
+      border: 1px solid #ccc;
+      height: 300px;
+      overflow-y: scroll;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    #messageInput {
+      width: calc(100% - 60px);
+    }
+  </style>
+</head>
+<body>
+  <h1>WebRTC Text Messaging</h1>
+  <div id="messages"></div>
+  <input type="text" id="messageInput" placeholder="Enter message">
+  <button id="sendButton">Send</button>
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+
+    const signalingServerUrl = 'ws://0.0.0.0:3000';
+    const signalingServer = new WebSocket(signalingServerUrl);
+    const peerConnection = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+
+    let dataChannel;
+
+    signalingServer.onmessage = async (message) => {
+      const data = JSON.parse(message.data);
+
+      if (data.type === 'offer') {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        signalingServer.send(JSON.stringify({ type: 'answer', sdp: peerConnection.localDescription }));
+      } else if (data.type === 'answer') {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
+      } else if (data.type === 'candidate') {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+      }
+    };
+
+    peerConnection.onicecandidate = (event) => {
+      if (event.candidate) {
+        signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate }));
+      }
+    };
+
+    peerConnection.ondatachannel = (event) => {
+      dataChannel = event.channel;
+      setupDataChannel();
+    };
+
+    function setupDataChannel() {
+      dataChannel.onopen = () => console.log('Data channel opened');
+      dataChannel.onclose = () => console.log('Data channel closed');
+      dataChannel.onmessage = (event) => {
+        const msgDiv = document.createElement('div');
+        msgDiv.textContent = `Peer: ${event.data}`;
+        messagesDiv.appendChild(msgDiv);
+      };
+    }
+
+    sendButton.addEventListener('click', () => {
+      const message = messageInput.value;
+      if (message && dataChannel.readyState === 'open') {
+        dataChannel.send(message);
+        const msgDiv = document.createElement('div');
+        msgDiv.textContent = `You: ${message}`;
+        messagesDiv.appendChild(msgDiv);
+        messageInput.value = '';
+      }
+    });
+
+    signalingServer.onopen = async () => {
+      dataChannel = peerConnection.createDataChannel('chat');
+      setupDataChannel();
+
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      signalingServer.send(JSON.stringify({ type: 'offer', sdp: peerConnection.localDescription }));
+    };
+  </script>
+</body>
+</html>

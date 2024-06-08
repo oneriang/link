@@ -1,0 +1,62 @@
+// client/manifest.json
+{
+    // 定义 Web 应用程序的名称
+    "name": "Snapdrop",
+    // 定义 Web 应用程序的短名称
+    "short_name": "Snapdrop",
+    // 定义 Web 应用程序的图标
+    "icons": [
+        // 定义 192x192 像素的图标
+        {
+            "src": "images/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        // 定义 512x512 像素的图标
+        {
+            "src": "images/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        // 定义 192x192 像素的可遮罩图标
+        {
+            "src": "images/android-chrome-192x192-maskable.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        // 定义 512x512 像素的可遮罩图标
+        {
+            "src": "images/android-chrome-512x512-maskable.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        // 定义 96x96 像素的图标
+        {
+            "src": "images/favicon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ],
+    // 定义 Web 应用程序的背景颜色
+    "background_color": "#efefef",
+    // 定义 Web 应用程序的启动 URL
+    "start_url": "/",
+    // 定义 Web 应用程序的显示模式
+    "display": "minimal-ui",
+    // 定义 Web 应用程序的主题颜色
+    "theme_color": "#3367d6",
+    // 定义 Web 应用程序的共享目标
+    "share_target": {
+        // 定义共享目标的方法
+        "method": "GET",
+        // 定义共享目标的操作 URL
+        "action": "/?share_target",
+        // 定义共享目标的参数
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>WebRTC Data Channel</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <textarea id="dataChannelSend" placeholder="Type some text here..." disabled></textarea>
+  <textarea id="dataChannelReceive" placeholder="Received data will appear here..." disabled></textarea>
+  <button id="startButton">Start</button>
+  <button id="sendButton" disabled>Send</button>
+  <button id="closeButton" disabled>Close</button>
+
+  <script>
+    'use strict';
+
+    let localConnection;
+    let sendChannel;
+    let receiveChannel;
+    const dataChannelSend = document.querySelector('textarea#dataChannelSend');
+    const dataChannelReceive = document.querySelector('textarea#dataChannelReceive');
+    const startButton = document.querySelector('button#startButton');
+    const sendButton = document.querySelector('button#sendButton');
+    const closeButton = document.querySelector('button#closeButton');
+
+    const socket = io(); // Change this to your server address if necessary
+
+    startButton.onclick = createConnection;
+    sendButton.onclick = sendData;
+    closeButton.onclick = closeDataChannels;
+
+    // createConnection();
+
+    socket.on('offer', (offer) => {
+      localConnection.setRemoteDescription(offer);
+      localConnection.createAnswer().then(gotDescription2, onCreateSessionDescriptionError);
+    });
+
+    socket.on('answer', (answer) => {
+      localConnection.setRemoteDescription(answer);
+    });
+
+    socket.on('candidate', (candidate) => {
+      localConnection.addIceCandidate(candidate.candidate).then(onAddIceCandidateSuccess, onAddIceCandidateError);
+    });
+
+    function enableStartButton() {
+      startButton.disabled = false;
+    }
+
+    function disableSendButton() {
+      sendButton.disabled = true;
+    }
+
+    function createConnection() {
+      dataChannelSend.placeholder = '';
+      const servers = null; // ICE servers
+      window.localConnection = localConnection = new RTCPeerConnection(servers);
+      console.log('Created local peer connection object localConnection');
+
+      sendChannel = localConnection.createDataChannel('sendDataChannel');
+      console.log('Created send data channel');
+
+      localConnection.onicecandidate = e => {
+        if (e.candidate) {
+          socket.emit('candidate', { from: 'local', candidate: e.candidate });
+        }
+      };
+      sendChannel.onopen = onSendChannelStateChange;
+      sendChannel.onclose = onSendChannelStateChange;
+
+      localConnection.ondatachannel = receiveChannelCallback;
+
+      localConnection.createOffer().then(
+        gotDescription1,
+        onCreateSessionDescriptionError
+      );
+      startButton.disabled = true;
+      closeButton.disabled = false;
+    }
+
+    function onCreateSessionDescriptionError(error) {
+      console.log('Failed to create session description: ' + error.toString());
+    }
+
+    function sendData() {
+      const data = dataChannelSend.value;
+      sendChannel.send(data);
+      console.log('Sent Data: ' + data);
+    }
+
+    function closeDataChannels() {
+      console.log('Closing data channels');
+      sendChannel.close();
+      console.log('Closed data channel with label: ' + sendChannel.label);
+      receiveChannel.close();
+      console.log('Closed data channel with label: ' + receiveChannel.label);
+      localConnection.close();
+      localConnection = null;
+      console.log('Closed peer connections');
+      startButton.disabled = false;
+      sendButton.disabled = true;
+      closeButton.disabled = true;
+      dataChannelSend.value = '';
+      dataChannelReceive.value = '';
+      dataChannelSend.disabled = true;
+      disableSendButton();
+      enableStartButton();
+    }
+
+    function gotDescription1(desc) {
+      localConnection.setLocalDescription(desc);
+      console.log(`Offer from localConnection\n${desc.sdp}`);
+      socket.emit('offer', desc);
+    }
+
+    function gotDescription2(desc) {
+      localConnection.setLocalDescription(desc);
+      console.log(`Answer from remoteConnection\n${desc.sdp}`);
+      socket.emit('answer', desc);
+    }
+
+    function getOtherPc(pc) {
+      return (pc === localConnection) ? remoteConnection : localConnection;
+    }
+
+    function getName(pc) {
+      return (pc === localConnection) ? 'localPeerConnection' : 'remotePeerConnection';
+    }
+
+    function onAddIceCandidateSuccess() {
+      console.log('AddIceCandidate success.');
+    }
+
+    function onAddIceCandidateError(error) {
+      console.log(`Failed to add Ice Candidate: ${error.toString()}`);
+    }
+
+    function receiveChannelCallback(event) {
+      console.log('Receive Channel Callback');
+      receiveChannel = event.channel;
+      receiveChannel.onmessage = onReceiveMessageCallback;
+      receiveChannel.onopen = onReceiveChannelStateChange;
+      receiveChannel.onclose = onReceiveChannelStateChange;
+    }
+
+    function onReceiveMessageCallback(event) {
+      console.log('Received Message');
+      dataChannelReceive.value = event.data;
+    }
+
+    function onSendChannelStateChange() {
+      console.log('onSendChannelStateChange');
+      const readyState = sendChannel.readyState;
+      console.log('Send channel state is: ' + readyState);
+      if (readyState === 'open') {
+        dataChannelSend.disabled = false;
+        dataChannelSend.focus();
+        sendButton.disabled = false;
+        closeButton.disabled = false;
+      } else {
+        dataChannelSend.disabled = true;
+        sendButton.disabled = true;
+        closeButton.disabled = true;
+      }
+    }
+
+    function onReceiveChannelStateChange() {
+      const readyState = receiveChannel.readyState;
+      console.log(`Receive channel state is: ${readyState}`);
+    }
+  </script>
+</body>
+
+</html>

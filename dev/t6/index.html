@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Chat</title>
+</head>
+<body>
+    <h2>WebRTC Chat</h2>
+    <div id="chat">
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const signalingServerUrl = 'wss://signal.yiersan.link';
+        let peerConnection;
+        let dataChannel;
+        const signalingServer = new WebSocket(signalingServerUrl);
+
+        signalingServer.onmessage = async (message) => {
+            console.log(message);
+            const data = JSON.parse(message.data);
+            if (data.type === 'offer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                signalingServer.send(JSON.stringify(peerConnection.localDescription));
+            } else if (data.type === 'answer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data));
+            } else if (data.type === 'candidate') {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            }
+        };
+
+        function createPeerConnection() {
+            peerConnection = new RTCPeerConnection();
+
+            dataChannel = peerConnection.createDataChannel('chat');
+            dataChannel.onmessage = (event) => {
+                const messagesDiv = document.getElementById('messages');
+                const message = document.createElement('div');
+                message.textContent = event.data;
+                messagesDiv.appendChild(message);
+            };
+
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate }));
+                }
+            };
+
+            peerConnection.ondatachannel = (event) => {
+                dataChannel = event.channel;
+                dataChannel.onmessage = (event) => {
+                    const messagesDiv = document.getElementById('messages');
+                    const message = document.createElement('div');
+                    message.textContent = event.data;
+                    messagesDiv.appendChild(message);
+                };
+            };
+        }
+
+        async function startConnection() {
+            createPeerConnection();
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            signalingServer.send(JSON.stringify(peerConnection.localDescription));
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            dataChannel.send(message);
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = `You: ${message}`;
+            messagesDiv.appendChild(messageDiv);
+            messageInput.value = '';
+        }
+
+        signalingServer.onopen = () => {
+            startConnection();
+        };
+    </script>
+</body>
+</html>

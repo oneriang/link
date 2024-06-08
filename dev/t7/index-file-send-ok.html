@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Multi-User Chat</title>
+    <style>
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>WebRTC Multi-User Chat</h2>
+    <div id="chat">
+        <div id="localId"></div>
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="document.getElementById('fileInput').click()">Send File</button>
+        <input type="file" id="fileInput" onchange="sendFile()">
+    </div>
+
+    <script>
+        const signalingServerUrl = 'wss://signal.yiersan.link';
+        const signalingServer = new WebSocket(signalingServerUrl);
+        let peerConnections = {}; // Store peer connections
+        let dataChannels = {}; // Store data channels
+        let localId = Math.floor(Math.random() * 10000);
+
+        const $localId = document.getElementById('localId');
+        $localId.textContent = localId;
+
+        signalingServer.onmessage = async (message) => {
+            const data = JSON.parse(message.data);
+            const { from, to, type, id } = data;
+
+            if (type === 'new-peer') {
+                await connectToNewPeer(id);
+            } else if (type === 'offer') {
+                await handleOffer(data);
+            } else if (type === 'answer') {
+                await handleAnswer(data);
+            } else if (type === 'candidate') {
+                await handleCandidate(data);
+            } else if (type === 'peer-left') {
+                handlePeerLeft(id);
+            }
+        };
+
+        function createPeerConnection(peerId) {
+            const peerConnection = new RTCPeerConnection();
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate, from: localId, to: peerId }));
+                }
+            };
+
+            peerConnection.ondatachannel = (event) => {
+                const dataChannel = event.channel;
+                dataChannel.onmessage = handleDataChannelMessage(peerId);
+                dataChannel.onopen = () => {
+                    console.log(`Data channel with ${peerId} is open`);
+                    dataChannels[peerId] = dataChannel;
+                };
+                dataChannel.onerror = (error) => {
+                    console.error(`Data channel error with ${peerId}:`, error);
+                    displayMessage(`Data channel error with ${peerId}: ${error}`);
+                };
+            };
+
+            peerConnections[peerId] = peerConnection;
+            return peerConnection;
+        }
+
+        function handleDataChannelMessage(peerId) {
+            let receivedBuffers = [];
+            return (event) => {
+                if (typeof event.data === 'string') {
+                    displayMessage(`Peer ${peerId}: ${event.data}`);
+                } else {
+                    receivedBuffers.push(event.data);
+                    if (event.data.byteLength < 65536) { // End of file
+                        const receivedBlob = new Blob(receivedBuffers);
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = URL.createObjectURL(receivedBlob);
+                        downloadLink.download = 'received_file';
+                        downloadLink.textContent = 'Download received file';
+                        const messagesDiv = document.getElementById('messages');
+                        messagesDiv.appendChild(downloadLink);
+                        receivedBuffers = []; // Reset buffer
+                    }
+                }
+            };
+        }
+
+        async function handleOffer({ from, sdp }) {
+            const peerConnection = createPeerConnection(from);
+            await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp }));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            signalingServer.send(JSON.stringify({ type: 'answer', sdp: answer.sdp, from: localId, to: from }));
+        }
+
+        async function handleAnswer({ from, sdp }) {
+            const peerConnection = peerConnections[from];
+            if (peerConnection.signalingState === "have-local-offer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp }));
+            }
+        }
+
+        async function handleCandidate({ from, candidate }) {
+            const peerConnection = peerConnections[from];
+            if (peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            }
+        }
+
+        async function connectToNewPeer(peerId) {
+            const peerConnection = createPeerConnection(peerId);
+            const dataChannel = peerConnection.createDataChannel('chat');
+            dataChannel.onmessage = handleDataChannelMessage(peerId);
+            dataChannel.onopen = () => {
+                console.log(`Data channel with ${peerId} is open`);
+                dataChannels[peerId] = dataChannel;
+            };
+            dataChannel.onerror = (error) => {
+                console.error(`Data channel error with ${peerId}:`, error);
+                displayMessage(`Data channel error with ${peerId}: ${error}`);
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            signalingServer.send(JSON.stringify({ type: 'offer', sdp: offer.sdp, from: localId, to: peerId }));
+        }
+
+        function handlePeerLeft(peerId) {
+            if (peerConnections[peerId]) {
+                peerConnections[peerId].close();
+                delete peerConnections[peerId];
+                delete dataChannels[peerId];
+                displayMessage(`Peer ${peerId} left`);
+            }
+        }
+
+        async function startConnection() {
+            signalingServer.send(JSON.stringify({ type: 'join', id: localId }));
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(message);
+                }
+            }
+            displayMessage(`You: ${message}`);
+            messageInput.value = '';
+        }
+
+        async function sendFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                return;
+            }
+            const chunkSize = 65536;
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    let offset = 0;
+                    while (offset < file.size) {
+                        const chunk = file.slice(offset, offset + chunkSize);
+                        try {
+                            dataChannels[peerId].send(await chunk.arrayBuffer());
+                        } catch (error) {
+                            console.error(`Error sending file chunk to ${peerId}:`, error);
+                            displayMessage(`Error sending file chunk to ${peerId}: ${error}`);
+                            break;
+                        }
+                        offset += chunkSize;
+                    }
+                }
+            }
+            displayMessage(`You sent a file: ${file.name}`);
+        }
+
+        function displayMessage(message) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+        }
+
+        signalingServer.onopen = () => {
+            startConnection();
+        };
+    </script>
+</body>
+
+</html>

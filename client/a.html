@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Centering</title>
+    <style>
+        .parent {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px; /* For demonstration purposes */
+            border: 1px solid #000;
+        }
+        .child {
+            width: 100px;
+            height: 100px;
+            background-color: lightcoral;
+        }
+    </style>
+</head>
+<body>
+<div class="parent" id="parent">
+        Parent
+        <div class="child" id="child">
+            Child
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('parent').addEventListener('mousedown', function(event) {
+            console.log('Parent mousedown');
+        });
+
+        document.getElementById('child').addEventListener('mousedown', function(event) {
+            console.log('Child mousedown');
+            // event.stopPropagation(); // 确保没有阻止冒泡
+        });
+    </script>
+</body>
+</html>

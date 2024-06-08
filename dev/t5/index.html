@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <title>WebRTC Example</title>
+  <style>
+    #localVideo,
+    #remoteVideo {
+      width: 45%;
+      height: auto;
+      display: inline-block;
+    }
+
+    #messageContainer {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+      height: 200px;
+      overflow-y: scroll;
+    }
+
+    #messageInput {
+      width: 80%;
+    }
+  </style>
+</head>
+
+<body>
+  <video id="localVideo" autoplay playsinline></video>
+  <video id="remoteVideo" autoplay playsinline></video>
+  <div id="messageContainer"></div>
+  <input type="text" id="messageInput" placeholder="Type your message here...">
+  <button id="sendButton">Send</button>
+
+  <script>
+
+
+    let peers = {}; // 记录对等连接，键为对等 ID（即 socket.io ID）
+
+    // 创建 PeerConnection
+    const peerConnection = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' }
+      ]
+    });
+
+    // 处理远端流
+    peerConnection.ontrack = event => {
+      const [remoteStream] = event.streams;
+      const remoteVideo = document.getElementById('remoteVideo');
+      remoteVideo.srcObject = remoteStream;
+    };
+
+		// 处理数据通道事件
+		peerConnection.ondatachannel = function (event) {
+			console.log("Datachannel event", event);
+			event.channel.onmessage = (msg) => {
+        console.log(msg);
+				let dataMessage = {};
+				try {
+					dataMessage = JSON.parse(msg.data);
+          console.log(dataMessage);
+					displayMessage(dataMessage.message);
+				} catch (err) {
+					console.log(err);
+				}
+			};
+		};
+
+    // 创建数据通道
+    const dataChannel = peerConnection.createDataChannel('chat');
+
+    // 处理数据通道状态变化
+    dataChannel.onopen = () => {
+      console.log('Data channel is open');
+    };
+
+    dataChannel.onclose = () => {
+      console.log('Data channel is closed');
+    };
+
+    // 处理收到的消息
+    dataChannel.onmessage = event => {
+      const message = event.data;
+      console.log('Received message:', message);
+      displayMessage(message, 'remote');
+    };
+
+    // 发送文本消息
+    function sendMessage(message) {
+      dataChannel.send(message);
+      displayMessage(message, 'local');
+    }
+
+    // 显示消息的示例函数
+    function displayMessage(message, type) {
+      const messageContainer = document.getElementById('messageContainer');
+      const messageElement = document.createElement('p');
+      messageElement.textContent = type === 'local' ? `You: ${message}` : `Remote: ${message}`;
+      messageContainer.appendChild(messageElement);
+    }
+
+    // 示例：发送按钮的事件监听器
+    document.getElementById('sendButton').addEventListener('click', () => {
+      const messageInput = document.getElementById('messageInput');
+      const message = {'message':messageInput.value};
+      sendMessage(JSON.stringify(message));
+      messageInput.value = '';
+    });
+
+    // 创建 WebSocket 连接
+    const signalingServer = new WebSocket('wss://signal.yiersan.link');
+
+
+    // 接收到信令消息时的处理
+    signalingServer.onmessage = (message) => {
+      console.log(message.data);
+      const data = JSON.parse(message.data);
+      handleSignalingMessage(data);
+    };
+
+    // WebSocket 连接关闭时的处理
+    signalingServer.onclose = () => {
+      console.log('Disconnected from the signaling server');
+    };
+
+    // 发送消息到信令服务器的示例函数
+    function sendToSignalingServer(message) {
+      signalingServer.send(JSON.stringify(message));
+    }
+
+
+    // 处理信令消息
+    function handleSignalingMessage(message) {
+      if (message.type === 'peers') {
+
+      } else if (message.type === 'offer') {
+        peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp))
+          .then(() => peerConnection.createAnswer())
+          .then(answer => peerConnection.setLocalDescription(answer))
+          .then(() => {
+            sendToSignalingServer({
+              type: 'answer',
+              sdp: peerConnection.localDescription
+            });
+          })
+          .catch(error => console.error('Error handling offer.', error));
+      } else if (message.type === 'answer') {
+        peerConnection.setRemoteDescription(new RTCSessionDescription(message.sdp))
+          .catch(error => console.error('Error setting remote description.', error));
+      } else if (message.type === 'candidate') {
+        peerConnection.addIceCandidate(new RTCIceCandidate(message.candidate))
+          .catch(error => console.error('Error adding ICE candidate.', error));
+      }
+    }
+
+    // WebSocket 连接打开时的处理
+    signalingServer.onopen = () => {
+      console.log('Connected to the signaling server');
+
+      // 处理 ICE 候选者
+      peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+          sendToSignalingServer({
+            type: 'candidate',
+            candidate: event.candidate
+          });
+        }
+      };
+
+      /*
+      // 获取本地媒体流
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          // 将本地流添加到 PeerConnection
+          stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+          const localVideo = document.getElementById('localVideo');
+          localVideo.srcObject = stream;
+        })
+        .catch(error => console.error('Error accessing media devices.', error));
+      */
+      // 创建和发送 offer
+      peerConnection.createOffer()
+        .then(offer => peerConnection.setLocalDescription(offer))
+        .then(() => {
+          sendToSignalingServer({
+            type: 'offer',
+            sdp: peerConnection.localDescription
+          });
+        })
+        .catch(error => console.error('Error creating offer.', error));
+
+    };
+
+
+  </script>
+
+
+</body>
+
+</html>

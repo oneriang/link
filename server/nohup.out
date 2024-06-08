@@ -1,0 +1,1907 @@
+Snapdrop is running on port 9001
+SIGTERM Received, exiting...
+Snapdrop is running on port 9001
+SIGTERM Received, exiting...
+Snapdrop is running on port 9001
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 85500,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 35,
+        [Symbol(triggerId)]: 27
+      },
+      lastBeat: 1717374146504
+    }
+  }
+}
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: 'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 280790,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 114,
+        [Symbol(triggerId)]: 105
+      },
+      lastBeat: 1717374312625
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: 'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 300798,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 125,
+        [Symbol(triggerId)]: 117
+      },
+      lastBeat: 1717374362016
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 345039,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 176,
+        [Symbol(triggerId)]: 168
+      },
+      lastBeat: 1717374406149
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 592602,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 269,
+        [Symbol(triggerId)]: 261
+      },
+      lastBeat: 1717374653622
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: 'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 673221,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 317,
+        [Symbol(triggerId)]: 311
+      },
+      lastBeat: 1717374734984
+    }
+  }
+}
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 697303,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 341,
+        [Symbol(triggerId)]: 332
+      },
+      lastBeat: 1717374758476
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: 'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 698988,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 377,
+        [Symbol(triggerId)]: 368
+      },
+      lastBeat: 1717374760103
+    }
+  }
+}
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 709183,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 414,
+        [Symbol(triggerId)]: 405
+      },
+      lastBeat: 1717374770314
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: 'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 710759,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 452,
+        [Symbol(triggerId)]: 443
+      },
+      lastBeat: 1717374771841
+    }
+  }
+}
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 712582,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 486,
+        [Symbol(triggerId)]: 477
+      },
+      lastBeat: 1717374773595
+    }
+  }
+}
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 772627,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 553,
+        [Symbol(triggerId)]: 545
+      },
+      lastBeat: 1717374803675
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: 'fdcfeb68-871e-42f3-87fd-ed8d2b0eadca',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 840275,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 594,
+        [Symbol(triggerId)]: 590
+      },
+      lastBeat: 1717374841292
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+fdcfeb68-871e-42f3-87fd-ed8d2b0eadca
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.175',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 1104584,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 699,
+        [Symbol(triggerId)]: 691
+      },
+      lastBeat: 1717375165621
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    '38ffcc46-9f97-4ef5-9768-193acfb6d642': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '38ffcc46-9f97-4ef5-9768-193acfb6d642',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 5333616,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 908,
+        [Symbol(triggerId)]: 903
+      },
+      lastBeat: 1717379394736
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    '38ffcc46-9f97-4ef5-9768-193acfb6d642': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '38ffcc46-9f97-4ef5-9768-193acfb6d642',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 5333616,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 908,
+        [Symbol(triggerId)]: 903
+      },
+      lastBeat: 1717379394736
+    },
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.131',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 5347137,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 922,
+        [Symbol(triggerId)]: 913
+      },
+      lastBeat: 1717379408100
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 8378190,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1443,
+        [Symbol(triggerId)]: 1439
+      },
+      lastBeat: 1717382439943
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 11956751,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1767,
+        [Symbol(triggerId)]: 1759
+      },
+      lastBeat: 1717386017773
+    }
+  }
+}
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 11956751,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1767,
+        [Symbol(triggerId)]: 1759
+      },
+      lastBeat: 1717386017773
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    '38ffcc46-9f97-4ef5-9768-193acfb6d642': Peer {
+      socket: [WebSocket],
+      ip: '1.75.0.42',
+      id: '38ffcc46-9f97-4ef5-9768-193acfb6d642',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 11968533,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1826,
+        [Symbol(triggerId)]: 1817
+      },
+      lastBeat: 1717386029566
+    }
+  }
+}
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 11972387,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1875,
+        [Symbol(triggerId)]: 1866
+      },
+      lastBeat: 1717386033419
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12142994,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1999,
+        [Symbol(triggerId)]: 1991
+      },
+      lastBeat: 1717386204049
+    }
+  }
+}
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 12173003,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2019,
+        [Symbol(triggerId)]: 1999
+      },
+      lastBeat: 1717386234085
+    },
+    '38ffcc46-9f97-4ef5-9768-193acfb6d642': Peer {
+      socket: [WebSocket],
+      ip: '49.97.22.33',
+      id: '38ffcc46-9f97-4ef5-9768-193acfb6d642',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 12182715,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2023,
+        [Symbol(triggerId)]: 2014
+      },
+      lastBeat: 1717386243804
+    }
+  }
+}
+_onHeaders
+response
+peerid: 38ffcc46-9f97-4ef5-9768-193acfb6d642
+38ffcc46-9f97-4ef5-9768-193acfb6d642
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12323071,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2088,
+        [Symbol(triggerId)]: 2084
+      },
+      lastBeat: 1717386385157
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12653261,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2175,
+        [Symbol(triggerId)]: 2171
+      },
+      lastBeat: 1717386714916
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12683266,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2227,
+        [Symbol(triggerId)]: 2175
+      },
+      lastBeat: 1717386744271
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.97.22.33',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12712352,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2250,
+        [Symbol(triggerId)]: 2241
+      },
+      lastBeat: 1717386773401
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '887f9209-4c58-4b69-b9c0-d19d68a3d2dd': Peer {
+      socket: [WebSocket],
+      ip: '27.253.251.200',
+      id: '887f9209-4c58-4b69-b9c0-d19d68a3d2dd',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12716347,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2305,
+        [Symbol(triggerId)]: 2296
+      },
+      lastBeat: 1717386777371
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.97.22.33',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12742941,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2410,
+        [Symbol(triggerId)]: 2402
+      },
+      lastBeat: 1717386804062
+    }
+  }
+}
+_onHeaders
+response
+peerid: 887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+887f9209-4c58-4b69-b9c0-d19d68a3d2dd
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.97.22.33',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 12832977,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2471,
+        [Symbol(triggerId)]: 2467
+      },
+      lastBeat: 1717386894858
+    }
+  }
+}
+_onHeaders
+response
+peerid: aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 37085621,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2732,
+        [Symbol(triggerId)]: 2724
+      },
+      lastBeat: 1717411146764
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 37085621,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2732,
+        [Symbol(triggerId)]: 2724
+      },
+      lastBeat: 1717411146764
+    }
+  }
+}
+_onHeaders
+response
+peerid: aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37085621,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2732,
+        [Symbol(triggerId)]: 2724
+      },
+      lastBeat: 1717411146764
+    },
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37102465,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2779,
+        [Symbol(triggerId)]: 2771
+      },
+      lastBeat: 1717411163497
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [Timeout],
+        _idleStart: 37110028,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2800,
+        [Symbol(triggerId)]: 2791
+      },
+      lastBeat: 1717411171091
+    },
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37102465,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2779,
+        [Symbol(triggerId)]: 2771
+      },
+      lastBeat: 1717411163497
+    }
+  }
+}
+_onHeaders
+response
+peerid: aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37110028,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2800,
+        [Symbol(triggerId)]: 2791
+      },
+      lastBeat: 1717411171091
+    },
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [Timeout],
+        _idleStart: 37127118,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2874,
+        [Symbol(triggerId)]: 2865
+      },
+      lastBeat: 1717411188220
+    }
+  }
+}
+_onHeaders
+response
+peerid: aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [Timeout],
+        _idleStart: 37139882,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2925,
+        [Symbol(triggerId)]: 2916
+      },
+      lastBeat: 1717411201005
+    },
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37157120,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2952,
+        [Symbol(triggerId)]: 2874
+      },
+      lastBeat: 1717411218236
+    }
+  }
+}
+_onHeaders
+response
+peerid: aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [Timeout],
+        _idleStart: 37157120,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2952,
+        [Symbol(triggerId)]: 2874
+      },
+      lastBeat: 1717411218236
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: 'aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37164861,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 2991,
+        [Symbol(triggerId)]: 2982
+      },
+      lastBeat: 1717411226160
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+aa7a90b8-b2d2-41ea-a7ed-dbc8fa74a3c4
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37203946,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3070,
+        [Symbol(triggerId)]: 3062
+      },
+      lastBeat: 1717411264967
+    }
+  }
+}
+_onHeaders
+response
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37203946,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3070,
+        [Symbol(triggerId)]: 3062
+      },
+      lastBeat: 1717411264967
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37203946,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3070,
+        [Symbol(triggerId)]: 3062
+      },
+      lastBeat: 1717411264967
+    },
+    '11d969d0-1d3a-4e27-9f47-d18ea74add88': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '11d969d0-1d3a-4e27-9f47-d18ea74add88',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37225461,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3109,
+        [Symbol(triggerId)]: 3100
+      },
+      lastBeat: 1717411286488
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '11d969d0-1d3a-4e27-9f47-d18ea74add88': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '11d969d0-1d3a-4e27-9f47-d18ea74add88',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37225461,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3109,
+        [Symbol(triggerId)]: 3100
+      },
+      lastBeat: 1717411286488
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '11d969d0-1d3a-4e27-9f47-d18ea74add88': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '11d969d0-1d3a-4e27-9f47-d18ea74add88',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37255465,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3247,
+        [Symbol(triggerId)]: 3109
+      },
+      lastBeat: 1717411316646
+    },
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37266305,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3251,
+        [Symbol(triggerId)]: 3192
+      },
+      lastBeat: 1717411297320
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 37537968,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3345,
+        [Symbol(triggerId)]: 3337
+      },
+      lastBeat: 1717411599216
+    }
+  }
+}
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 37537968,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3345,
+        [Symbol(triggerId)]: 3337
+      },
+      lastBeat: 1717411599216
+    }
+  }
+}
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 37537968,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3345,
+        [Symbol(triggerId)]: 3337
+      },
+      lastBeat: 1717411599216
+    }
+  }
+}
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37597983,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3450,
+        [Symbol(triggerId)]: 3443
+      },
+      lastBeat: 1717411599216
+    },
+    '11d969d0-1d3a-4e27-9f47-d18ea74add88': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '11d969d0-1d3a-4e27-9f47-d18ea74add88',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37578683,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3449,
+        [Symbol(triggerId)]: 3416
+      },
+      lastBeat: 1717411609821
+    }
+  }
+}
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [Timeout],
+        _idleStart: 37597983,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3450,
+        [Symbol(triggerId)]: 3443
+      },
+      lastBeat: 1717411599216
+    }
+  }
+}
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '76d1b42c-2d00-40d9-91e5-20d895463e40': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '76d1b42c-2d00-40d9-91e5-20d895463e40',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [TimersList],
+        _idleStart: 37597983,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3450,
+        [Symbol(triggerId)]: 3443
+      },
+      lastBeat: 1717411599216
+    },
+    '11d969d0-1d3a-4e27-9f47-d18ea74add88': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '11d969d0-1d3a-4e27-9f47-d18ea74add88',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [Timeout],
+        _idleNext: [Timeout],
+        _idleStart: 37606489,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3511,
+        [Symbol(triggerId)]: 3503
+      },
+      lastBeat: 1717411667526
+    }
+  }
+}
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 11d969d0-1d3a-4e27-9f47-d18ea74add88
+11d969d0-1d3a-4e27-9f47-d18ea74add88
+_joinRoom
+{ 'peer.ip': {} }
+_onHeaders
+response
+peerid: 76d1b42c-2d00-40d9-91e5-20d895463e40
+76d1b42c-2d00-40d9-91e5-20d895463e40
+_joinRoom
+{
+  'peer.ip': {
+    '11d969d0-1d3a-4e27-9f47-d18ea74add88': Peer {
+      socket: [WebSocket],
+      ip: '49.98.149.30',
+      id: '11d969d0-1d3a-4e27-9f47-d18ea74add88',
+      rtcSupported: true,
+      name: [Object],
+      timerId: Timeout {
+        _idleTimeout: 30000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 37726484,
+        _onTimeout: [Function],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: true,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 3645,
+        [Symbol(triggerId)]: 3637
+      },
+      lastBeat: 1717411787619
+    }
+  }
+}
+SIGTERM Received, exiting...
