@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Cartoon Avatar</title>
+    <style>
+        .avatar {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            background-color: lightblue;
+            border: 2px solid #000;
+            margin: 20px auto;
+        }
+        .eye {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            position: absolute;
+        }
+        .left-eye {
+            top: 30px;
+            left: 20px;
+        }
+        .right-eye {
+            top: 30px;
+            right: 20px;
+        }
+        .mouth {
+            width: 40px;
+            height: 10px;
+            background-color: red;
+            position: absolute;
+            top: 60px;
+            left: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="avatar" class="avatar">
+        <div class="eye left-eye"></div>
+        <div class="eye right-eye"></div>
+        <div class="mouth"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
+    <script>
+        function generateRandomAvatar() {
+            const uuid = uuidv4();
+            const hash = hashCode(uuid);
+
+            const avatar = document.getElementById('avatar');
+            const eyes = avatar.getElementsByClassName('eye');
+            const mouth = avatar.querySelector('.mouth');
+
+            // Randomize eye positions and size
+            for (let eye of eyes) {
+                eye.style.top = `${30 + (hash % 10)}px`;
+                eye.style.left = eye.classList.contains('left-eye') ? `${20 + (hash % 10)}px` : '';
+                eye.style.right = eye.classList.contains('right-eye') ? `${20 + (hash % 10)}px` : '';
+                eye.style.width = eye.style.height = `${20 + (hash % 10)}px`;
+            }
+
+            // Randomize mouth position and size
+            mouth.style.top = `${60 + (hash % 10)}px`;
+            mouth.style.left = `${30 + (hash % 10)}px`;
+            mouth.style.width = `${40 + (hash % 20)}px`;
+            mouth.style.height = `${10 + (hash % 5)}px`;
+
+            // Randomize avatar background color
+            avatar.style.backgroundColor = `hsl(${hash % 360}, 70%, 80%)`;
+        }
+
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = (hash << 5) - hash + char;
+                hash |= 0;
+            }
+            return hash;
+        }
+
+        generateRandomAvatar();
+    </script>
+</body>
+</html>

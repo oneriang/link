@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Multi-User Chat</title>
+    <style>
+        #fileInput {
+            display: none;
+        }
+    </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            background-color: #e9e9e9;
+            border-radius: 5px;
+        }
+
+        .message.sender {
+            background-color: #d1f7d1;
+            text-align: right;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 130px);
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #fileLabel {
+            padding: 8px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2196f3;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #fileLabel:hover {
+            background-color: #1e87db;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <h2>WebRTC Multi-User Chat</h2>
+    <div id="chat">
+        <div id="localId"></div>
+        <div id="peerList"></div>
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="document.getElementById('fileInput').click()">Send File</button>
+        <input type="file" id="fileInput" onchange="sendFile()">
+    </div>
+
+<script>
+        const signalingServerUrl = 'wss://signal.yiersan.link';
+        const signalingServer = new WebSocket(signalingServerUrl);
+        let peerConnections = {};
+        let dataChannels = {};
+        let peerStates = {};
+        //let localId = Math.floor(Math.random() * 10000); // 随机生成本地 ID
+        let localId = localStorage.getItem('localId');
+        if (!localId) {
+            localId = crypto.randomUUID(); // 随机生成本地 ID
+            localStorage.setItem('localId', localId);
+        }
+
+        const $localId = document.getElementById('localId');
+        $localId.textContent = 'Your ID: ' + localId;
+
+        const $peerList = document.getElementById('peerList');
+
+        signalingServer.onmessage = async (message) => {
+            const data = JSON.parse(message.data);
+            const { from, to, type, id } = data;
+
+            if (type === 'new-peer') {
+                await connectToNewPeer(id);
+                peerStates[id] = 'online';
+                updatePeerList();
+            } else if (type === 'offer') {
+                await handleOffer(data);
+                peerStates[from] = 'online';
+                updatePeerList();
+            } else if (type === 'answer') {
+                await handleAnswer(data);
+                peerStates[from] = 'online';
+                updatePeerList();
+            } else if (type === 'candidate') {
+                await handleCandidate(data);
+            } else if (type === 'peer-left') {
+                handlePeerLeft(id);
+                peerStates[id] = 'offline';
+                updatePeerList();
+            }
+        };
+
+        function createPeerConnection(peerId) {
+            //const peerConnection = new RTCPeerConnection();
+            const peerConnection = new RTCPeerConnection({
+                'sdpSemantics': 'unified-plan',
+                'iceServers': [{
+                    urls: 'stun:stun.l.google.com:19302'
+                }]
+            });
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate, from: localId, to: peerId }));
+                }
+            };
+
+            peerConnection.ondatachannel = (event) => {
+                const dataChannel = event.channel;
+                dataChannel.onmessage = handleDataChannelMessage(peerId);
+                dataChannel.onopen = () => {
+                    console.log(`Data channel with ${peerId} is open`);
+                    dataChannels[peerId] = dataChannel;
+                };
+                dataChannel.onerror = (error) => {
+                    console.error(`Data channel error with ${peerId}:`, error);
+                    displayMessage(`Data channel error with ${peerId}: ${error}`);
+                };
+            };
+
+            peerConnections[peerId] = peerConnection;
+            return peerConnection;
+        }
+
+        // 处理 DataChannel 消息
+
+        let fileReceived = false;
+        let fileName = '';
+        let fileType = '';
+        let fileExtension = '';
+        function handleDataChannelMessage(peerId) {
+            let receivedBuffers = [];
+            return (event) => {
+                if (typeof event.data === 'string') {
+                    const message = JSON.parse(event.data);
+                    if (message.type == 'file-header') {
+                        if (!fileReceived) {
+                            const fileHeader = JSON.parse(event.data);
+                            fileName = fileHeader.fileName;
+                            fileType = fileHeader.fileType;
+                            fileExtension = fileName.split('.').pop();
+                            fileReceived = true;
+                        }
+                    } else {
+                        displayMessage(`Peer ${peerId}: ${message.data}`); // 显示文本消息                        
+                    }                
+                } else {
+                    receivedBuffers.push(event.data);
+                    if (event.data.byteLength < 65536) { // 判断文件块结束
+                        const receivedBlob = new Blob(receivedBuffers, { type: fileType });
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = URL.createObjectURL(receivedBlob);
+                        downloadLink.download = fileName; // 使用原始文件名
+                        downloadLink.textContent = 'Download received file';
+                        const messagesDiv = document.getElementById('messages');
+                        messagesDiv.appendChild(downloadLink);
+                        receivedBuffers = []; // 重置缓冲区
+                        fileReceived = false;
+                    }
+                }
+            };
+        }
+        
+        /*
+        function handleDataChannelMessage(peerId) {
+            let receivedBuffers = [];
+            let fileInfo = null; // 用于保存文件信息
+            return (event) => {
+                if (typeof event.data === 'string') {
+                    displayMessage(`Peer ${peerId}: ${event.data}`);
+                } else {
+                    receivedBuffers.push(event.data);
+                    if (!fileInfo) { // 如果尚未接收到文件信息
+                        try {
+                            fileInfo = JSON.parse(event.data); // 解析文件信息
+                        } catch (error) {
+                            console.error(`Error parsing file info from ${peerId}:`, error);
+                            displayMessage(`Error parsing file info from ${peerId}: ${error}`);
+                        }
+                    }
+                    if (event.data.byteLength < 65536 && fileInfo) { // 文件块结束并且已接收到文件信息
+                        const receivedBlob = new Blob(receivedBuffers, { type: fileInfo.type }); // 使用文件信息的类型
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = URL.createObjectURL(receivedBlob);
+                        downloadLink.download = fileInfo.name; // 使用文件信息的名称
+                        downloadLink.textContent = 'Download received file';
+                        const messagesDiv = document.getElementById('messages');
+                        messagesDiv.appendChild(downloadLink);
+                        receivedBuffers = []; // 重置缓冲区
+                        fileInfo = null; // 重置文件信息
+                    }
+                }
+            };
+        }
+        */
+
+        async function handleOffer({ from, sdp }) {
+            const peerConnection = createPeerConnection(from);
+            await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp }));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            signalingServer.send(JSON.stringify({ type: 'answer', sdp: answer.sdp, from: localId, to: from }));
+        }
+
+        async function handleAnswer({ from, sdp }) {
+            const peerConnection = peerConnections[from];
+            if (peerConnection.signalingState === "have-local-offer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp }));
+            }
+        }
+
+        async function handleCandidate({ from, candidate }) {
+            const peerConnection = peerConnections[from];
+            if (peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            }
+        }
+
+        async function connectToNewPeer(peerId) {
+            const peerConnection = createPeerConnection(peerId);
+            const dataChannel = peerConnection.createDataChannel('chat');
+            dataChannel.onmessage = handleDataChannelMessage(peerId);
+            dataChannel.onopen = () => {
+                console.log(`Data channel with ${peerId} is open`);
+                dataChannels[peerId] = dataChannel;
+            };
+            dataChannel.onerror = (error) => {
+                console.error(`Data channel error with ${peerId}:`, error);
+                displayMessage(`Data channel error with ${peerId}: ${error}`);
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            signalingServer.send(JSON.stringify({ type: 'offer', sdp: offer.sdp, from: localId, to: peerId }));
+        }
+
+        function handlePeerLeft(peerId) {
+            if (peerConnections[peerId]) {
+                peerConnections[peerId].close();
+                delete peerConnections[peerId];
+                delete dataChannels[peerId];
+                displayMessage(`Peer ${peerId} left`);
+            }
+        }
+
+        async function startConnection() {
+            signalingServer.send(JSON.stringify({ type: 'join', id: localId }));
+        }
+
+        // 发送文本消息
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = {
+                type: 'message',
+                data: messageInput.value
+            };
+            
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(JSON.stringify(message));
+                }
+            }
+            displayMessage(`You: ${message.data}`);
+            messageInput.value = '';
+        }
+        /*
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(message);
+                }
+            }
+            displayMessage(`You: ${message}`);
+            messageInput.value = '';
+        }
+        */
+
+        async function sendFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                return;
+            }
+            
+            const chunkSize = 65536;
+                   
+            const fileHeader = {
+                type: 'file-header',
+                fileName: file.name,
+                fileType: file.type
+            };
+
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    // 同时发送文件信息和文件数据
+                    dataChannels[peerId].send(JSON.stringify(fileHeader));
+                   let offset = 0;
+                     while (offset < file.size) {
+                        const chunk = file.slice(offset, offset + chunkSize);
+                        try {
+                            dataChannels[peerId].send(await chunk.arrayBuffer());
+                        } catch (error) {
+                            console.error(`Error sending file chunk to ${peerId}:`, error);
+                            displayMessage(`Error sending file chunk to ${peerId}: ${error}`);
+                            break;
+                        }
+                        offset += chunkSize;
+                    }
+                }
+            }
+            displayMessage(`You sent a file: ${file.name}`);
+        }
+
+        function displayMessage(message) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+        }
+
+        function updatePeerList() {
+            $peerList.innerHTML = '';
+            for (const peerId in peerStates) {
+                const peerDiv = document.createElement('div');
+                peerDiv.textContent = `Peer ${peerId} is ${peerStates[peerId]}`;
+                $peerList.appendChild(peerDiv);
+            }
+        }
+
+        signalingServer.onopen = () => {
+            startConnection();
+        };
+    </script>
+    
+    
+    <script>
+    /*
+        const signalingServerUrl = 'wss://signal.yiersan.link'; // 信令服务器地址
+        const signalingServer = new WebSocket(signalingServerUrl); // 创建 WebSocket 连接
+        let peerConnections = {}; // 存储 PeerConnection 对象
+        let dataChannels = {}; // 存储 DataChannel 对象
+        //let localId = Math.floor(Math.random() * 10000); // 随机生成本地 ID
+        let localId = localStorage.getItem('localId');
+        if (!localId) {
+            localId = crypto.randomUUID(); // 随机生成本地 ID
+            localStorage.setItem('localId', localId);
+        }
+
+        const $localId = document.getElementById('localId');
+        $localId.textContent = localId;
+
+        // 处理信令服务器消息
+        signalingServer.onmessage = async (message) => {
+            const data = JSON.parse(message.data);
+            const { from, to, type, id } = data;
+
+            if (type === 'new-peer') {
+                await connectToNewPeer(id); // 连接到新节点
+            } else if (type === 'offer') {
+                await handleOffer(data); // 处理 offer 信令
+            } else if (type === 'answer') {
+                await handleAnswer(data); // 处理 answer 信令
+            } else if (type === 'candidate') {
+                await handleCandidate(data); // 处理 ICE 候选
+            } else if (type === 'peer-left') {
+                handlePeerLeft(id); // 处理节点离开
+            }
+        };
+
+        // 创建 PeerConnection 对象
+        function createPeerConnection(peerId) {
+            const peerConnection = new RTCPeerConnection({
+                'sdpSemantics': 'unified-plan',
+                'iceServers': [{
+                    urls: 'stun:stun.l.google.com:19302'
+                }]
+            });
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    // 发送 ICE 候选到信令服务器
+                    signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate, from: localId, to: peerId }));
+                }
+            };
+
+            peerConnection.ondatachannel = (event) => {
+                const dataChannel = event.channel;
+                dataChannel.onmessage = handleDataChannelMessage(peerId); // 处理 DataChannel 消息
+                dataChannel.onopen = () => {
+                    console.log(`Data channel with ${peerId} is open`);
+                    dataChannels[peerId] = dataChannel;
+                };
+                dataChannel.onerror = (error) => {
+                    console.error(`Data channel error with ${peerId}:`, error);
+                    displayMessage(`Data channel error with ${peerId}: ${error}`);
+                };
+            };
+
+            peerConnections[peerId] = peerConnection;
+            return peerConnection;
+        }
+
+        // 处理 DataChannel 消息
+
+        let fileReceived = false;
+        let fileName = '';
+        let fileType = '';
+        let fileExtension = '';
+        function handleDataChannelMessage(peerId) {
+            let receivedBuffers = [];
+            return (event) => {
+                if (typeof event.data === 'string') {
+                    const message = JSON.parse(event.data);
+                    if (message.type == 'file-header') {
+                        if (!fileReceived) {
+                            const fileHeader = JSON.parse(event.data);
+                            fileName = fileHeader.fileName;
+                            fileType = fileHeader.fileType;
+                            fileExtension = fileName.split('.').pop();
+                            fileReceived = true;
+                        }
+                    } else {
+                        displayMessage(`Peer ${peerId}: ${message.data}`); // 显示文本消息                        
+                    }                
+                } else {
+                    receivedBuffers.push(event.data);
+                    if (event.data.byteLength < 65536) { // 判断文件块结束
+                        const receivedBlob = new Blob(receivedBuffers, { type: fileType });
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = URL.createObjectURL(receivedBlob);
+                        downloadLink.download = fileName; // 使用原始文件名
+                        downloadLink.textContent = 'Download received file';
+                        const messagesDiv = document.getElementById('messages');
+                        messagesDiv.appendChild(downloadLink);
+                        receivedBuffers = []; // 重置缓冲区
+                        fileReceived = false;
+                    }
+                }
+            };
+        }
+
+        // 处理 offer 信令
+        async function handleOffer({ from, sdp }) {
+            const peerConnection = createPeerConnection(from);
+            await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp }));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            signalingServer.send(JSON.stringify({ type: 'answer', sdp: answer.sdp, from: localId, to: from }));
+        }
+
+        // 处理 answer 信令
+        async function handleAnswer({ from, sdp }) {
+            const peerConnection = peerConnections[from];
+            if (peerConnection.signalingState === "have-local-offer") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp }));
+            }
+        }
+
+        // 处理 ICE 候选
+        async function handleCandidate({ from, candidate }) {
+            const peerConnection = peerConnections[from];
+            if (peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            }
+        }
+
+        // 连接到新节点
+        async function connectToNewPeer(peerId) {
+            const peerConnection = createPeerConnection(peerId);
+            const dataChannel = peerConnection.createDataChannel('chat');
+            dataChannel.onmessage = handleDataChannelMessage(peerId);
+            dataChannel.onopen = () => {
+                console.log(`Data channel with ${peerId} is open`);
+                dataChannels[peerId] = dataChannel;
+            };
+            dataChannel.onerror = (error) => {
+                console.error(`Data channel error with ${peerId}:`, error);
+                displayMessage(`Data channel error with ${peerId}: ${error}`);
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            signalingServer.send(JSON.stringify({ type: 'offer', sdp: offer.sdp, from: localId, to: peerId }));
+        }
+
+        // 处理节点离开
+        function handlePeerLeft(peerId) {
+            if (peerConnections[peerId]) {
+                peerConnections[peerId].close();
+                delete peerConnections[peerId];
+                delete dataChannels[peerId];
+                displayMessage(`Peer ${peerId} left`);
+            }
+        }
+
+        // 开始连接
+        async function startConnection() {
+            signalingServer.send(JSON.stringify({ type: 'join', id: localId }));
+        }
+
+        // 发送文本消息
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = {
+                type: 'message',
+                data: messageInput.value
+            };
+            
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(JSON.stringify(message));
+                }
+            }
+            displayMessage(`You: ${message.data}`);
+            messageInput.value = '';
+        }
+
+        // 发送文件
+        async function sendFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                return;
+            }
+            const chunkSize = 65536;
+            const fileHeader = {
+                type: 'file-header',
+                fileName: file.name,
+                fileType: file.type
+            };
+            for (let peerId in dataChannels) {
+                if (dataChannels[peerId].readyState === 'open') {
+                    dataChannels[peerId].send(JSON.stringify(fileHeader));
+                    let offset = 0;
+                    while (offset < file.size) {
+                        const chunk = file.slice(offset, offset + chunkSize);
+                        try {
+                            dataChannels[peerId].send(await chunk.arrayBuffer());
+                        } catch (error) {
+                            console.error(`Error sending file chunk to ${peerId}:`, error);
+                            displayMessage(`Error sending file chunk to ${peerId}: ${error}`);
+                            break;
+                        }
+                        offset += chunkSize;
+                    }
+                }
+            }
+            displayMessage(`You sent a file: ${file.name}`);
+        }
+
+        // 显示消息
+        function displayMessage(message) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+        }
+
+        // WebSocket 连接打开时，开始连接
+        signalingServer.onopen = () => {
+            startConnection();
+        };
+        */
+    </script>
+</body>
+
+</html>

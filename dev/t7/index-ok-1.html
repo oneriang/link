@@ -101,7 +101,6 @@
     <h2>WebRTC Multi-User Chat</h2>
     <div id="chat">
         <div id="localId"></div>
-        <div id="peerList"></div>
         <div id="messages"></div>
         <input type="text" id="messageInput" placeholder="Type a message...">
         <button onclick="sendMessage()">Send</button>
@@ -109,52 +108,41 @@
         <input type="file" id="fileInput" onchange="sendFile()">
     </div>
 
-<script>
+    <script>
         const signalingServerUrl = 'wss://signal.yiersan.link'; // 信令服务器地址
-        const signalingServer = new WebSocket(signalingServerUrl); // 创建 WebSocket 连接到信令服务器
-        let peerConnections = {}; // 存储所有对等连接
-        let dataChannels = {}; // 存储所有数据通道
-        let peerStates = {}; // 存储所有对等端的状态
-        let localId = localStorage.getItem('localId'); // 获取本地 ID，如果没有则生成一个新的
+        const signalingServer = new WebSocket(signalingServerUrl); // 创建 WebSocket 连接
+        let peerConnections = {}; // 存储 PeerConnection 对象
+        let dataChannels = {}; // 存储 DataChannel 对象
+        //let localId = Math.floor(Math.random() * 10000); // 随机生成本地 ID
+        let localId = localStorage.getItem('localId');
         if (!localId) {
             localId = crypto.randomUUID(); // 随机生成本地 ID
-            localStorage.setItem('localId', localId); // 将本地 ID 存储到 localStorage 中
+            localStorage.setItem('localId', localId);
         }
 
         const $localId = document.getElementById('localId');
-        $localId.textContent = 'Your ID: ' + localId; // 显示本地 ID
+        $localId.textContent = localId;
 
-        const $peerList = document.getElementById('peerList'); // 对等端列表
-
-        // 处理从信令服务器接收到的消息
+        // 处理信令服务器消息
         signalingServer.onmessage = async (message) => {
             const data = JSON.parse(message.data);
             const { from, to, type, id } = data;
 
             if (type === 'new-peer') {
-                await connectToNewPeer(id); // 连接到新对等端
-                peerStates[id] = 'online'; // 设置对等端状态为在线
-                updatePeerList(); // 更新对等端列表
+                await connectToNewPeer(id); // 连接到新节点
             } else if (type === 'offer') {
                 await handleOffer(data); // 处理 offer 信令
-                peerStates[from] = 'online'; // 设置对等端状态为在线
-                updatePeerList(); // 更新对等端列表
             } else if (type === 'answer') {
                 await handleAnswer(data); // 处理 answer 信令
-                peerStates[from] = 'online'; // 设置对等端状态为在线
-                updatePeerList(); // 更新对等端列表
             } else if (type === 'candidate') {
                 await handleCandidate(data); // 处理 ICE 候选
             } else if (type === 'peer-left') {
-                handlePeerLeft(id); // 处理对等端离开
-                peerStates[id] = 'offline'; // 设置对等端状态为离线
-                updatePeerList(); // 更新对等端列表
+                handlePeerLeft(id); // 处理节点离开
             }
         };
 
-        // 创建新的对等连接
+        // 创建 PeerConnection 对象
         function createPeerConnection(peerId) {
-            //const peerConnection = new RTCPeerConnection();
             const peerConnection = new RTCPeerConnection({
                 'sdpSemantics': 'unified-plan',
                 'iceServers': [{
@@ -163,13 +151,14 @@
             });
             peerConnection.onicecandidate = (event) => {
                 if (event.candidate) {
-                    signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate, from: localId, to: peerId })); // 发送 ICE 候选到信令服务器
+                    // 发送 ICE 候选到信令服务器
+                    signalingServer.send(JSON.stringify({ type: 'candidate', candidate: event.candidate, from: localId, to: peerId }));
                 }
             };
 
             peerConnection.ondatachannel = (event) => {
                 const dataChannel = event.channel;
-                dataChannel.onmessage = handleDataChannelMessage(peerId); // 处理数据通道消息
+                dataChannel.onmessage = handleDataChannelMessage(peerId); // 处理 DataChannel 消息
                 dataChannel.onopen = () => {
                     console.log(`Data channel with ${peerId} is open`);
                     dataChannels[peerId] = dataChannel;
@@ -184,7 +173,8 @@
             return peerConnection;
         }
 
-        // 处理数据通道消息
+        // 处理 DataChannel 消息
+
         let fileReceived = false;
         let fileName = '';
         let fileType = '';
@@ -247,7 +237,7 @@
             }
         }
 
-        // 连接到新对等端
+        // 连接到新节点
         async function connectToNewPeer(peerId) {
             const peerConnection = createPeerConnection(peerId);
             const dataChannel = peerConnection.createDataChannel('chat');
@@ -266,7 +256,7 @@
             signalingServer.send(JSON.stringify({ type: 'offer', sdp: offer.sdp, from: localId, to: peerId }));
         }
 
-        // 处理对等端离开
+        // 处理节点离开
         function handlePeerLeft(peerId) {
             if (peerConnections[peerId]) {
                 peerConnections[peerId].close();
@@ -297,7 +287,7 @@
             displayMessage(`You: ${message.data}`);
             messageInput.value = '';
         }
-        
+
         // 发送文件
         async function sendFile() {
             const fileInput = document.getElementById('fileInput');
@@ -305,21 +295,17 @@
             if (!file) {
                 return;
             }
-            
             const chunkSize = 65536;
-                   
             const fileHeader = {
                 type: 'file-header',
                 fileName: file.name,
                 fileType: file.type
             };
-
             for (let peerId in dataChannels) {
                 if (dataChannels[peerId].readyState === 'open') {
-                    // 同时发送文件信息和文件数据
                     dataChannels[peerId].send(JSON.stringify(fileHeader));
-                   let offset = 0;
-                     while (offset < file.size) {
+                    let offset = 0;
+                    while (offset < file.size) {
                         const chunk = file.slice(offset, offset + chunkSize);
                         try {
                             dataChannels[peerId].send(await chunk.arrayBuffer());
@@ -343,22 +329,11 @@
             messagesDiv.appendChild(messageDiv);
         }
 
-        // 更新对等端列表
-        function updatePeerList() {
-            $peerList.innerHTML = '';
-            for (const peerId in peerStates) {
-                const peerDiv = document.createElement('div');
-                peerDiv.textContent = `Peer ${peerId} is ${peerStates[peerId]}`;
-                $peerList.appendChild(peerDiv);
-            }
-        }
-
         // WebSocket 连接打开时，开始连接
         signalingServer.onopen = () => {
             startConnection();
         };
     </script>
-    
 </body>
 
 </html>
