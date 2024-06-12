@@ -27,6 +27,35 @@
             text-align: center;
         }
 
+        #userList {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .user img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        #chatInterface {
+            display: none;
+        }
+
         #messages {
             border: 1px solid #ccc;
             padding: 10px;
@@ -34,18 +63,6 @@
             max-height: 200px;
             overflow-y: auto;
             background-color: #f9f9f9;
-        }
-
-        .message {
-            padding: 5px;
-            margin-bottom: 5px;
-            background-color: #e9e9e9;
-            border-radius: 5px;
-        }
-
-        .message.sender {
-            background-color: #d1f7d1;
-            text-align: right;
         }
 
         input[type="text"] {
@@ -74,10 +91,6 @@
         #fileInput {
             display: none;
         }
-        
-        .fileInput {
-            display: none;
-        }
 
         #fileLabel {
             padding: 8px 15px;
@@ -97,115 +110,16 @@
 
 <body>
     <h2>WebRTC Multi-User Chat</h2>
-    <div id="login" style="display: none">
-        <input type="text" id="inputUserName" placeholder="Type UserName">
-        <button id="buttonLogin">Login</button>
-    </div>
-    <div id="chat" class="container" style="display: none">
-        <div class="container" id="localId"></div>
-        <div class="container" id="peerList1"></div>
-        <div class="container" id="peerList"></div>
-        <select id="peerSelect">
-            <option value="all">All</option>
-        </select>
-        
+    <div id="userList" class="container"></div>
+    <div id="chatInterface" class="container">
+        <div id="localId"></div>
+        <div id="peerId"></div>
         <div id="messages"></div>
         <input type="text" id="messageInput" placeholder="Type a message...">
         <button onclick="sendMessage()">Send</button>
         <button onclick="document.getElementById('fileInput').click()">Send File</button>
         <input type="file" id="fileInput" onchange="sendFile()">
-        
     </div>
-    
-    <div id="chats"></div>
-    
-    
-    <script>
-    
-    window.$chats = document.getElementById('chats');
-    const $login = document.getElementById('login');
-    const $chat = document.getElementById('chat');
-    const $userName = document.getElementById('inputUserName');
-    const $buttonLogin = document.getElementById('buttonLogin');
-    $buttonLogin.addEventListener('click', e => login(e));
-    
-    function login(e) {
-        if(!$userName.value){
-           alert('UserName!');
-           return; 
-        }
-        localId = crypto.randomUUID(); // 随机生成本地 ID
-        localStorage.setItem('localId', localId); // 将本地 ID 存储到 localStorage 中
-        userName = $userName.value;
-        localStorage.setItem('userName', userName); // 将本地 ID 存储到 localStorage 中
-    }
-    </script>
-    <script>
-
-    class Chat {
-
-        html() {
-            return `
-                <!-- Chat Dialog -->
-                <div class="chat container" style="display: none;">
-                    <div class="localId"></div>
-                    <div class="messages"></div>
-                    <input type="text" class="messageInput" placeholder="Type a message...">
-                    <button class="send" onclick="sendMessage()">Send</button>
-                    <button class="fileInput" onclick="document.getElementById('fileInput').click()">Send File</button>
-                    <input type="file" class="fileInput" onchange="sendFile()">
-                </div>
-                <div class="peer-item">
-                    
-                </div>
-            `
-        }
-    
-        constructor(id) {
-            this.id = id;
-            this._initDom();
-            //this.$el = document.getElementById(id);
-            //this.$el.querySelectorAll('[close]').forEach(el=>el.addEventListener('click', e=>this.hide()))
-            //this.$autoFocus = this.$el.querySelector('[autofocus]');
-
-            this.$chat = this.$el.querySelector('.chat');
-            this.$localId = this.$chat.querySelector('.localId');
-            this.$localId.innerText = this.id;
-
-            this.$peerItem = this.$el.querySelector('.peer-item');
-            this.$peerItem.innerText = this.id;
-            this.$peerItem.addEventListener('click', e => this.show(e));
-        }
-    
-        _initDom() {
-            const el = document.createElement('div');
-            el.id = this.id;
-            el.innerHTML = this.html();
-            el.ui = this;
-            this.$el = el;
-            // window.$chats.appendChild(this.$el);
-        }
-    
-        //_onRecipient(recipient) {
-        //    this._recipient = recipient;
-        //    this.show();
-        //}
-    
-        show() {
-            //this.$el.setAttribute('show', 1);
-            //if (this.$autoFocus)
-            //    this.$autoFocus.focus();
-            this.$chat.style.display = 'block';
-        }
-    
-        hide() {
-            //this.$el.removeAttribute('show');
-            //document.activeElement.blur();
-            //window.blur();
-        }
-    }
-
-    </script>
 
     <script>
         const signalingServerUrl = 'wss://signal.yiersan.link'; // 信令服务器地址
@@ -214,29 +128,155 @@
         let dataChannels = {}; // 存储所有数据通道
         let peerStates = {}; // 存储所有对等端的状态
         let localId = localStorage.getItem('localId'); // 获取本地 ID，如果没有则生成一个新的
-        let userName = localStorage.getItem('userName'); // 获取本地 ID，如果没有则生成一个新的
+        let currentPeerId = null; // 当前选择的对等端 ID
 
-        //for (let i = 0; i < 9; i++) {
-        //  console.log(i);
-        //  // その他の文
-        //  const chat = new Chat();
-        //}
-
-        
-        if (!userName) {
-            $login.style.display = 'block';
+        if (!localId) {
             localId = crypto.randomUUID(); // 随机生成本地 ID
             localStorage.setItem('localId', localId); // 将本地 ID 存储到 localStorage 中
-        } else {
-            $login.style.display = 'none';
-            $chat.style.display = 'block';
         }
 
         const $localId = document.getElementById('localId');
         $localId.textContent = 'Your ID: ' + localId; // 显示本地 ID
 
-        const $peerList = document.getElementById('peerList'); // 对等端列表
-        const $peerList1 = document.getElementById('peerList1'); // 对等端列表
+        const $peerId = document.getElementById('peerId');
+        const $userList = document.getElementById('userList'); // 用户列表
+
+        // Function to generate random color
+        function generateRandomColor() {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        }
+
+        // Function to generate random geometry
+        function generateRandomGeometry(svg) {
+            var shapes = ['circle', 'rect', 'ellipse', 'line', 'polygon'];
+            var colors = ['#FF5733', '#33FF57', '#5733FF', '#FFFF33', '#33FFFF', '#FF33FF', '#FF8833', '#33FF88', '#8833FF', '#FF3388'];
+            var width = svg.getAttribute('width');
+            var height = svg.getAttribute('height');
+
+            for (var i = 0; i < 20; i++) {
+                var shape = shapes[Math.floor(Math.random() * shapes.length)];
+                // var color = colors[Math.floor(Math.random() * colors.length)];
+                var color = generateRandomColor();
+
+                switch (shape) {
+                    case 'circle':
+                        var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        circle.setAttribute('cx', Math.random() * width);
+                        circle.setAttribute('cy', Math.random() * height);
+                        circle.setAttribute('r', Math.random() * 50);
+                        circle.setAttribute('fill', color);
+                        svg.appendChild(circle);
+                        break;
+                    case 'rect':
+                        var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        rect.setAttribute('x', Math.random() * width);
+                        rect.setAttribute('y', Math.random() * height);
+                        rect.setAttribute('width', Math.random() * 100);
+                        rect.setAttribute('height', Math.random() * 100);
+                        rect.setAttribute('fill', color);
+                        svg.appendChild(rect);
+                        break;
+                    case 'ellipse':
+                        var ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+                        ellipse.setAttribute('cx', Math.random() * width);
+                        ellipse.setAttribute('cy', Math.random() * height);
+                        ellipse.setAttribute('rx', Math.random() * 50);
+                        ellipse.setAttribute('ry', Math.random() * 70);
+                        ellipse.setAttribute('fill', color);
+                        svg.appendChild(ellipse);
+                        break;
+                    case 'line':
+                        var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', Math.random() * width);
+                        line.setAttribute('y1', Math.random() * height);
+                        line.setAttribute('x2', Math.random() * width);
+                        line.setAttribute('y2', Math.random() * height);
+                        line.setAttribute('stroke', color);
+                        line.setAttribute('stroke-width', Math.random() * 5);
+                        svg.appendChild(line);
+                        break;
+                    case 'polygon':
+                        var polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                        var points = [];
+                        for (var j = 0; j < 5; j++) {
+                            points.push(Math.random() * width + ',' + Math.random() * height);
+                        }
+                        polygon.setAttribute('points', points.join(' '));
+                        polygon.setAttribute('fill', color);
+                        svg.appendChild(polygon);
+                        break;
+                }
+            }
+        }
+
+        // // 生成随机头像 URL
+        // function getRandomAvatarUrl() {
+        //     const randomId = Math.floor(Math.random() * 1000);
+        //     return `https://i.pravatar.cc/150?img=${randomId}`;
+        // }
+
+        // 更新对等端列表
+        function updatePeerList() {
+            $userList.innerHTML = '';
+            for (const peerId in peerStates) {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'user';
+                userDiv.onclick = () => openChat(peerId);
+                // const avatar = document.createElement('svg');
+                // avatar.id = peerId;
+                // generateRandomGeometry(avatar);
+                const userName = document.createElement('div');
+                userName.textContent = `Peer ${peerId} (${peerStates[peerId]})`;
+                // userDiv.appendChild(avatar);
+                userDiv.appendChild(userName);
+                $userList.appendChild(userDiv);
+            }
+        }
+
+        // 打开单独聊天界面
+        function openChat(peerId) {
+            currentPeerId = peerId;
+            $peerId.textContent = `Chatting with Peer ${peerId}`;
+            document.getElementById('chatInterface').style.display = 'block';
+            displayMessages(peerId);
+        }
+
+        // 发送消息
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = {
+                type: 'message',
+                data: messageInput.value
+            };
+
+            if (currentPeerId && dataChannels[currentPeerId] && dataChannels[currentPeerId].readyState === 'open') {
+                dataChannels[currentPeerId].send(JSON.stringify(message));
+                displayMessage(`You: ${message.data}`, 'sender');
+            } else {
+                alert('No peer selected or connection is not open.');
+            }
+
+            messageInput.value = '';
+        }
+
+        // 显示消息
+        function displayMessage(message, sender) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            if (sender) {
+                messageDiv.classList.add(sender);
+            }
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+        }
+
+        // 显示所有消息
+        function displayMessages(peerId) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = ''; // 清空消息
+            // 这里可以添加逻辑从存储中加载与 peerId 的聊天记录
+        }
 
         // 处理从信令服务器接收到的消息
         signalingServer.onmessage = async (message) => {
@@ -373,7 +413,7 @@
                             fileReceived = true;
                         }
                     } else {
-                        displayMessage(`Peer ${peerId}: ${message.data}`); // 显示文本消息                        
+                        displayMessage(`Peer ${peerId}: ${message.data}`); // 显示文本消息
                     }
                 } else {
                     receivedBuffers.push(event.data);
@@ -431,10 +471,6 @@
                 displayMessage(`Data channel error with ${peerId}: ${error}`);
             };
 
-            const chat = new Chat(peerId);
-            window.$chats.appendChild(chat.$chat);
-            $peerList1.appendChild(chat.$peerItem);
-
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
             signalingServer.send(JSON.stringify({ type: 'offer', sdp: offer.sdp, from: localId, to: peerId }));
@@ -455,51 +491,6 @@
             signalingServer.send(JSON.stringify({ type: 'join', id: localId }));
         }
 
-        // // 发送文本消息
-        // function sendMessage() {
-        //     const messageInput = document.getElementById('messageInput');
-        //     const message = {
-        //         type: 'message',
-        //         data: messageInput.value
-        //     };
-
-        //     for (let peerId in dataChannels) {
-        //         if (dataChannels[peerId].readyState === 'open') {
-        //             dataChannels[peerId].send(JSON.stringify(message));
-        //         }
-        //     }
-        //     displayMessage(`You: ${message.data}`);
-        //     messageInput.value = '';
-        // }
-        // 发送消息
-        function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = {
-                type: 'message',
-                data: messageInput.value
-            };
-
-            const $peerSelect = document.getElementById('peerSelect');
-            const selectedPeerId = $peerSelect.value;
-
-            if (selectedPeerId === 'all') {
-                // 发送消息给所有用户
-                for (let peerId in dataChannels) {
-                    if (dataChannels[peerId].readyState === 'open') {
-                        dataChannels[peerId].send(JSON.stringify(message));
-                    }
-                }
-            } else {
-                // 仅发送消息给选定用户
-                if (dataChannels[selectedPeerId] && dataChannels[selectedPeerId].readyState === 'open') {
-                    dataChannels[selectedPeerId].send(JSON.stringify(message));
-                }
-            }
-
-            displayMessage(`You: ${message.data}`);
-            messageInput.value = '';
-        }
-
         // 发送文件
         async function sendFile() {
             const fileInput = document.getElementById('fileInput');
@@ -507,9 +498,6 @@
             if (!file) {
                 return;
             }
-
-            const $peerSelect = document.getElementById('peerSelect');
-            const selectedPeerId = $peerSelect.value;
 
             const chunkSize = 65536;
 
@@ -519,83 +507,36 @@
                 fileType: file.type
             };
 
-            if (selectedPeerId === 'all') {
-                // 发送消息给所有用户
-                for (let peerId in dataChannels) {
-                    if (dataChannels[peerId].readyState === 'open') {
-                        // 同时发送文件信息和文件数据
-                        dataChannels[peerId].send(JSON.stringify(fileHeader));
-                        let offset = 0;
-                        while (offset < file.size) {
-                            const chunk = file.slice(offset, offset + chunkSize);
-                            try {
-                                dataChannels[peerId].send(await chunk.arrayBuffer());
-                            } catch (error) {
-                                console.error(`Error sending file chunk to ${peerId}:`, error);
-                                displayMessage(`Error sending file chunk to ${peerId}: ${error}`);
-                                break;
-                            }
-                            offset += chunkSize;
-                        }
+            if (currentPeerId && dataChannels[currentPeerId] && dataChannels[currentPeerId].readyState === 'open') {
+                dataChannels[currentPeerId].send(JSON.stringify(fileHeader));
+                let offset = 0;
+                while (offset < file.size) {
+                    const chunk = file.slice(offset, offset + chunkSize);
+                    try {
+                        dataChannels[currentPeerId].send(await chunk.arrayBuffer());
+                    } catch (error) {
+                        console.error(`Error sending file chunk to ${currentPeerId}:`, error);
+                        displayMessage(`Error sending file chunk to ${currentPeerId}: ${error}`);
+                        break;
                     }
+                    offset += chunkSize;
                 }
+                displayMessage(`You sent a file: ${file.name}`);
             } else {
-                // 仅发送消息给选定用户
-                if (dataChannels[selectedPeerId] && dataChannels[selectedPeerId].readyState === 'open') {
-                    // 同时发送文件信息和文件数据
-                    dataChannels[selectedPeerId].send(JSON.stringify(fileHeader));
-                    let offset = 0;
-                    while (offset < file.size) {
-                        const chunk = file.slice(offset, offset + chunkSize);
-                        try {
-                            dataChannels[selectedPeerId].send(await chunk.arrayBuffer());
-                        } catch (error) {
-                            console.error(`Error sending file chunk to ${selectedPeerId}:`, error);
-                            displayMessage(`Error sending file chunk to ${selectedPeerId}: ${error}`);
-                            break;
-                        }
-                        offset += chunkSize;
-                    }
-                }
+                alert('No peer selected or connection is not open.');
             }
-
-            displayMessage(`You sent a file: ${file.name}`);
         }
 
         // 显示消息
-        function displayMessage(message) {
+        function displayMessage(message, sender) {
             const messagesDiv = document.getElementById('messages');
             const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            if (sender) {
+                messageDiv.classList.add(sender);
+            }
             messageDiv.textContent = message;
             messagesDiv.appendChild(messageDiv);
-        }
-
-        // // 更新对等端列表
-        // function updatePeerList() {
-        //     $peerList.innerHTML = '';
-        //     for (const peerId in peerStates) {
-        //         const peerDiv = document.createElement('div');
-        //         peerDiv.textContent = `Peer ${peerId} is ${peerStates[peerId]}`;
-        //         $peerList.appendChild(peerDiv);
-        //     }
-        // }
-        // 更新对等端列表
-        function updatePeerList() {
-            $peerList.innerHTML = '';
-            const $peerSelect = document.getElementById('peerSelect');
-            $peerSelect.innerHTML = '<option value="all">All</option>'; // 重置选项
-
-            for (const peerId in peerStates) {
-                const peerDiv = document.createElement('div');
-                peerDiv.textContent = `Peer ${peerId} is ${peerStates[peerId]}`;
-                // peerDiv.addEventListener('click', e => this.hide());
-                $peerList.appendChild(peerDiv);
-
-                const option = document.createElement('option');
-                option.value = peerId;
-                option.text = `Peer ${peerId}`;
-                $peerSelect.appendChild(option);
-            }
         }
 
         // 开始发送心跳包
@@ -627,7 +568,6 @@
             startPing();
         };
     </script>
-
 </body>
 
 </html>

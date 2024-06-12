@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Geometry</title>
+<style>
+  svg {
+    border: 1px solid #000;
+  }
+</style>
+</head>
+<body>
+  <svg id="randomGeometry" width="400" height="400"></svg>
+
+<script>
+  // Function to generate random UUID
+  function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0,
+          v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+
+  // Function to generate random color
+  function generateRandomColor() {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+  }
+
+  // Function to generate random geometry
+  function generateRandomGeometry(svg) {
+    var shapes = ['circle', 'rect', 'ellipse', 'line', 'polygon', 'path'];
+    var colors = ['#FF5733', '#33FF57', '#5733FF', '#FFFF33', '#33FFFF', '#FF33FF', '#FF8833', '#33FF88', '#8833FF', '#FF3388'];
+    var width = svg.getAttribute('width');
+    var height = svg.getAttribute('height');
+
+    for (var i = 0; i < 20; i++) {
+      var shape = shapes[Math.floor(Math.random() * shapes.length)];
+      // var color = colors[Math.floor(Math.random() * colors.length)];
+      var color = generateRandomColor();
+
+      switch (shape) {
+        case 'circle':
+          var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', Math.random() * width);
+          circle.setAttribute('cy', Math.random() * height);
+          circle.setAttribute('r', Math.random() * 50);
+          circle.setAttribute('fill', color);
+          svg.appendChild(circle);
+          break;
+        case 'rect':
+          var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', Math.random() * width);
+          rect.setAttribute('y', Math.random() * height);
+          rect.setAttribute('width', Math.random() * 100);
+          rect.setAttribute('height', Math.random() * 100);
+          rect.setAttribute('fill', color);
+          svg.appendChild(rect);
+          break;
+        case 'ellipse':
+          var ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+          ellipse.setAttribute('cx', Math.random() * width);
+          ellipse.setAttribute('cy', Math.random() * height);
+          ellipse.setAttribute('rx', Math.random() * 50);
+          ellipse.setAttribute('ry', Math.random() * 70);
+          ellipse.setAttribute('fill', color);
+          svg.appendChild(ellipse);
+          break;
+        case 'line':
+          var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', Math.random() * width);
+          line.setAttribute('y1', Math.random() * height);
+          line.setAttribute('x2', Math.random() * width);
+          line.setAttribute('y2', Math.random() * height);
+          line.setAttribute('stroke', color);
+          line.setAttribute('stroke-width', Math.random() * 5);
+          svg.appendChild(line);
+          break;
+        case 'polygon':
+          var polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          var points = [];
+          for (var j = 0; j < 5; j++) {
+            points.push(Math.random() * width + ',' + Math.random() * height);
+          }
+          polygon.setAttribute('points', points.join(' '));
+          polygon.setAttribute('fill', color);
+          svg.appendChild(polygon);
+          break;
+        case 'path':
+          var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          var commands = ['M', 'L', 'C', 'Z'];
+          var pathData = 'M ' + (Math.random() * width) + ' ' + (Math.random() * height);
+          var numSegments = Math.floor(Math.random() * 5) + 1;
+          for (var k = 0; k < numSegments; k++) {
+            var command = commands[Math.floor(Math.random() * commands.length)];
+            if (command === 'Z') {
+              pathData += ' Z';
+            } else {
+              pathData += ' ' + command + ' ' + (Math.random() * width) + ' ' + (Math.random() * height);
+            }
+          }
+          path.setAttribute('d', pathData);
+          path.setAttribute('fill', color);
+          svg.appendChild(path);
+          break;
+      }
+    }
+  }
+
+  // Generate random geometry on page load
+  window.onload = function() {
+    var svg = document.getElementById('randomGeometry');
+    generateRandomGeometry(svg);
+  };
+</script>
+</body>
+</html>

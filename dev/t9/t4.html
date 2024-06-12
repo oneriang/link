@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <style>
+        html,
+        body {
+            position: relative;
+            height: 100%;
+        }
+
+        body {
+            background: #eee;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        input {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <login-page id="loginPage"></login-page>
+    <register-page id="registerPage" class="hidden"></register-page>
+    <chat-app id="chatApp" class="hidden" style="height: 100%;">
+        <!--
+    <div id="app">
+        
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <contact-list></contact-list>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+-->
+    </chat-app>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script>
+
+        class LoginPage extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+            <style>
+                .container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    background-color: #2c3e50;
+                }
+                .login-box {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                }
+                input {
+                    width: 100%;
+                    padding: 10px;
+                    margin: 10px 0;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                }
+                button {
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    background-color: #3498db;
+                    color: white;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+                button:hover {
+                    background-color: #2980b9;
+                }
+                .link {
+                    color: #3498db;
+                    cursor: pointer;
+                }
+            </style>
+
+            <div class="container">
+                <div class="login-box">
+                    <h2>Login</h2>
+                    <input type="text" placeholder="Username" id="username">
+                    <input type="password" placeholder="Password" id="password">
+                    <button id="loginButton">Login</button>
+                    <p>Don't have an account? <span class="link" id="registerLink">Register</span></p>
+                </div>
+            </div>
+        `;
+
+                this.shadowRoot.getElementById('loginButton').addEventListener('click', () => this.login());
+                this.shadowRoot.getElementById('registerLink').addEventListener('click', () => this.showRegister());
+            }
+
+            login() {
+                const username = this.shadowRoot.getElementById('username').value;
+                const password = this.shadowRoot.getElementById('password').value;
+
+                if (username && password) {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('chatApp').classList.remove('hidden');
+                }
+            }
+
+            showRegister() {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('registerPage').classList.remove('hidden');
+            }
+        }
+
+        class RegisterPage extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+            <style>
+                .container {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    background-color: #2c3e50;
+                }
+                .register-box {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                }
+                input {
+                    width: 100%;
+                    padding: 10px;
+                    margin: 10px 0;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                }
+                button {
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    background-color: #3498db;
+                    color: white;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+                button:hover {
+                    background-color: #2980b9;
+                }
+                .link {
+                    color: #3498db;
+                    cursor: pointer;
+                }
+            </style>
+            <div class="container">
+                <div class="register-box">
+                    <h2>Register</h2>
+                    <input type="text" placeholder="Username" id="username">
+                    <input type="password" placeholder="Password" id="password">
+                    <button id="registerButton">Register</button>
+                    <p>Already have an account? <span class="link" id="loginLink">Login</span></p>
+                </div>
+            </div>
+        `;
+
+                this.shadowRoot.getElementById('registerButton').addEventListener('click', () => this.register());
+                this.shadowRoot.getElementById('loginLink').addEventListener('click', () => this.showLogin());
+            }
+
+            register() {
+                const username = this.shadowRoot.getElementById('username').value;
+                const password = this.shadowRoot.getElementById('password').value;
+
+                if (username && password) {
+                    document.getElementById('registerPage').classList.add('hidden');
+                    document.getElementById('chatApp').classList.remove('hidden');
+                }
+            }
+
+            showLogin() {
+                document.getElementById('registerPage').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+            }
+        }
+
+        class ChatApp1 extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+            <style>
+                .app-container {
+                    display: flex;
+                    height: 100vh;
+                    width: 100vw;
+                    background-color: #f0f0f0;
+                }
+                .contact-list {
+                    width: 250px;
+                    background-color: #2c3e50;
+                    color: white;
+                    overflow-y: auto;
+                }
+                .contact-list div {
+                    padding: 15px;
+                    cursor: pointer;
+                    border-bottom: 1px solid #34495e;
+                }
+                .contact-list div:hover {
+                    background-color: #34495e;
+                }
+                .chat-windows {
+                    flex: 1;
+                    display: flex;
+                    flex-wrap: wrap;
+                    padding: 10px;
+                    gap: 10px;
+                    overflow-y: auto;
+                }
+            </style>
+            <div class="app-container">
+                <div class="contact-list"></div>
+                <div class="chat-windows"></div>
+            </div>
+        `;
+
+                this.contacts = [
+                    { id: 1, name: 'Alice' },
+                    { id: 2, name: 'Bob' },
+                    { id: 3, name: 'Charlie' }
+                ];
+
+                this.chatWindows = this.shadowRoot.querySelector('.chat-windows');
+                this.contactList = this.shadowRoot.querySelector('.contact-list');
+                this.loadContacts();
+            }
+
+            loadContacts() {
+                this.contacts.forEach(contact => {
+                    const contactElement = document.createElement('div');
+                    contactElement.textContent = contact.name;
+                    contactElement.addEventListener('click', () => this.openChatWindow(contact));
+                    this.contactList.appendChild(contactElement);
+                });
+            }
+
+            openChatWindow(contact) {
+                if (!this.chatWindows.querySelector(`chat-window[data-id="${contact.id}"]`)) {
+                    const chatWindow = document.createElement('chat-window');
+                    chatWindow.setAttribute('data-id', contact.id);
+                    chatWindow.setAttribute('name', contact.name);
+                    this.chatWindows.appendChild(chatWindow);
+                }
+            }
+        }
+
+        class ChatApp2 extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        .app-container {
+                            display: flex;
+                            height: 100vh;
+                            width: 100vw;
+                            background-color: #f0f0f0;
+                        }
+                        .contact-list {
+                            width: 250px;
+                            background-color: #2c3e50;
+                            color: white;
+                            overflow-y: auto;
+                            transition: width 0.3s;
+                        }
+                        .contact-list.hidden {
+                            width: 0;
+                            overflow: hidden;
+                        }
+                        .chat-windows {
+                            flex: 1;
+                            display: flex;
+                            flex-wrap: wrap;
+                            padding: 10px;
+                            gap: 10px;
+                            overflow-y: auto;
+                        }
+                        .toggle-button {
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            background-color: #3498db;
+                            color: white;
+                            border: none;
+                            padding: 10px;
+                            cursor: pointer;
+                            z-index: 1;
+                        }
+                    </style>
+                    <div class="app-container">
+                        <button class="toggle-button">Toggle Contacts</button>
+                        <div class="contact-list"></div>
+                        <div class="chat-windows"></div>
+                    </div>
+                `;
+
+                this.contacts = [
+                    { id: 1, name: 'Alice' },
+                    { id: 2, name: 'Bob' },
+                    { id: 3, name: 'Charlie' }
+                ];
+
+                this.contactList = this.shadowRoot.querySelector('.contact-list');
+                this.chatWindows = this.shadowRoot.querySelector('.chat-windows');
+                this.toggleButton = this.shadowRoot.querySelector('.toggle-button');
+
+                this.toggleButton.addEventListener('click', () => this.toggleContactList());
+                this.loadContacts();
+            }
+
+            loadContacts() {
+                this.contacts.forEach(contact => {
+                    const contactElement = document.createElement('div');
+                    contactElement.textContent = contact.name;
+                    contactElement.addEventListener('click', () => this.openChatWindow(contact));
+                    this.contactList.appendChild(contactElement);
+                });
+            }
+
+            openChatWindow(contact) {
+                if (!this.chatWindows.querySelector(`chat-window[data-id="${contact.id}"]`)) {
+                    const chatWindow = document.createElement('chat-window');
+                    chatWindow.setAttribute('data-id', contact.id);
+                    chatWindow.setAttribute('name', contact.name);
+                    this.chatWindows.appendChild(chatWindow);
+                }
+            }
+
+            toggleContactList() {
+                this.contactList.classList.toggle('hidden');
+            }
+        }
+
+        class ChatApp extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        .swiper-container {
+                            width: 100%;
+                            height: 100%;
+                        }
+                        .swiper-slide {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    </style>
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <contact-list></contact-list>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                const linkElem = document.createElement("link");
+                linkElem.setAttribute("rel", "stylesheet");
+                linkElem.setAttribute("href", "https://unpkg.com/swiper/swiper-bundle.min.css");
+
+                // 生成された要素をシャドウ DOM に添付
+                this.shadowRoot.appendChild(linkElem);
+
+                this.swiperContainer = this.shadowRoot.querySelector('.swiper-container');
+                this.swiperWrapper = this.shadowRoot.querySelector('.swiper-wrapper');
+            }
+
+            connectedCallback() {
+                this.swiper = new Swiper(this.swiperContainer, {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                    navigation: true,
+                });
+
+                this.shadowRoot.addEventListener('open-chat', (event) => {
+                    this.openChatWindow(event.detail);
+                });
+            }
+
+            openChatWindow(contact) {
+                const slide = document.createElement('div');
+                slide.classList.add('swiper-slide');
+                const chatWindow = document.createElement('chat-window');
+                chatWindow.setAttribute('data-id', contact.id);
+                chatWindow.setAttribute('name', contact.name);
+                slide.appendChild(chatWindow);
+                this.swiperWrapper.appendChild(slide);
+                this.swiper.update();
+                this.swiper.slideTo(this.swiper.slides.length - 1);
+            }
+        }
+
+        //customElements.define('chat-app', ChatApp);
+
+        //customElements.define('chat-app', ChatApp);
+        // class ChatWindow extends HTMLElement {
+        //     constructor() {
+        //         super();
+        //         this.attachShadow({ mode: 'open' });
+        //         this.shadowRoot.innerHTML = `
+        //     <style>
+        //         .chat-window {
+        //             border: 1px solid #ccc;
+        //             border-radius: 10px;
+        //             width: 300px;
+        //             height: 500px;
+        //             display: flex;
+        //             flex-direction: column;
+        //             background-color: white;
+        //             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        //         }
+        //         .header {
+        //             background: #3498db;
+        //             color: white;
+        //             padding: 10px;
+        //             border-top-left-radius: 10px;
+        //             border-top-right-radius: 10px;
+        //             text-align: center;
+        //             font-weight: bold;
+        //         }
+        //         .messages {
+        //             flex: 1;
+        //             padding: 10px;
+        //             overflow-y: auto;
+        //             border-bottom: 1px solid #ccc;
+        //         }
+        //         .message {
+        //             padding: 5px 10px;
+        //             border-radius: 5px;
+        //             margin-bottom: 10px;
+        //             max-width: 80%;
+        //             word-wrap: break-word;
+        //         }
+        //         .message.incoming {
+        //             background-color: #ecf0f1;
+        //             align-self: flex-start;
+        //         }
+        //         .message.outgoing {
+        //             background-color: #3498db;
+        //             color: white;
+        //             align-self: flex-end;
+        //         }
+        //         chat-input {
+        //             padding: 10px;
+        //         }
+        //     </style>
+        //     <div class="chat-window">
+        //         <div class="header"></div>
+        //         <div class="messages"></div>
+        //         <chat-input></chat-input>
+        //     </div>
+        // `;
+
+        //         this.header = this.shadowRoot.querySelector('.header');
+        //         this.messagesContainer = this.shadowRoot.querySelector('.messages');
+
+        //         this.shadowRoot.querySelector('chat-input').addEventListener('new-message', (event) => {
+        //             this.addMessage(event.detail, 'outgoing');
+        //         });
+        //     }
+
+        //     connectedCallback() {
+        //         this.header.textContent = this.getAttribute('name');
+        //     }
+
+        //     addMessage(message, type) {
+        //         const messageElement = document.createElement('div');
+        //         messageElement.textContent = message;
+        //         messageElement.classList.add('message', type);
+        //         this.messagesContainer.appendChild(messageElement);
+        //         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        //     }
+        // }
+        class ChatWindow1 extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+            <style>
+                .chat-window {
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    width: 300px;
+                    height: 500px;
+                    display: flex;
+                    flex-direction: column;
+                    background-color: white;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    position: relative;
+                }
+                .header {
+                    background: #3498db;
+                    color: white;
+                    padding: 10px;
+                    border-top-left-radius: 10px;
+                    border-top-right-radius: 10px;
+                    text-align: center;
+                    font-weight: bold;
+                    position: relative;
+                }
+                .close-button {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+                .messages {
+                    flex: 1;
+                    padding: 10px;
+                    overflow-y: auto;
+                    border-bottom: 1px solid #ccc;
+                }
+                .message {
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    margin-bottom: 10px;
+                    max-width: 80%;
+                    word-wrap: break-word;
+                }
+                .message.incoming {
+                    background-color: #ecf0f1;
+                    align-self: flex-start;
+                }
+                .message.outgoing {
+                    background-color: #3498db;
+                    color: white;
+                    align-self: flex-end;
+                }
+                chat-input {
+                    padding: 10px;
+                }
+            </style>
+            <div class="chat-window">
+                <div class="header">
+                    <span class="title"></span>
+                    <button class="close-button">&times;</button>
+                </div>
+                <div class="messages"></div>
+                <chat-input></chat-input>
+            </div>
+        `;
+
+                this.header = this.shadowRoot.querySelector('.header .title');
+                this.messagesContainer = this.shadowRoot.querySelector('.messages');
+                this.shadowRoot.querySelector('.close-button').addEventListener('click', () => this.closeWindow());
+
+                this.shadowRoot.querySelector('chat-input').addEventListener('new-message', (event) => {
+                    this.addMessage(event.detail, 'outgoing');
+                });
+            }
+
+            connectedCallback() {
+                this.header.textContent = this.getAttribute('name');
+            }
+
+            addMessage(message, type) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messageElement.classList.add('message', type);
+                this.messagesContainer.appendChild(messageElement);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+
+            closeWindow() {
+                this.remove();
+            }
+        }
+
+        class ChatWindow extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        .chat-window {
+                            border: 1px solid #ccc;
+                            border-radius: 10px;
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            background-color: white;
+                            position: relative;
+                        }
+                        .header {
+                            background: #3498db;
+                            color: white;
+                            padding: 10px;
+                            border-top-left-radius: 10px;
+                            border-top-right-radius: 10px;
+                            text-align: center;
+                            font-weight: bold;
+                            position: relative;
+                        }
+                        .close-button {
+                            position: absolute;
+                            top: 5px;
+                            right: 10px;
+                            background: none;
+                            border: none;
+                            color: white;
+                            font-size: 16px;
+                            cursor: pointer;
+                        }
+                        .messages {
+                            flex: 1;
+                            padding: 10px;
+                            overflow-y: auto;
+                            border-bottom: 1px solid #ccc;
+                        }
+                        .message {
+                            padding: 5px 10px;
+                            border-radius: 5px;
+                            margin-bottom: 10px;
+                            max-width: 80%;
+                            word-wrap: break-word;
+                        }
+                        .message.incoming {
+                            background-color: #ecf0f1;
+                            align-self: flex-start;
+                        }
+                        .message.outgoing {
+                            background-color: #3498db;
+                            color: white;
+                            align-self: flex-end;
+                        }
+                        chat-input {
+                            padding: 10px;
+                        }
+                    </style>
+                    <div class="chat-window">
+                        <div class="header">
+                            <span class="title"></span>
+                            <button class="close-button">&times;</button>
+                        </div>
+                        <div class="messages"></div>
+                        <chat-input></chat-input>
+                    </div>
+                `;
+
+                this.header = this.shadowRoot.querySelector('.header .title');
+                this.messagesContainer = this.shadowRoot.querySelector('.messages');
+                this.shadowRoot.querySelector('.close-button').addEventListener('click', () => this.closeWindow());
+
+                this.shadowRoot.querySelector('chat-input').addEventListener('new-message', (event) => {
+                    this.addMessage(event.detail, 'outgoing');
+                });
+            }
+
+            connectedCallback() {
+                this.header.textContent = this.getAttribute('name');
+            }
+
+            addMessage(message, type) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messageElement.classList.add('message', type);
+                this.messagesContainer.appendChild(messageElement);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+
+            closeWindow() {
+                this.remove();
+            }
+        }
+
+        //customElements.define('chat-window', ChatWindow);
+
+        class ContactList extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        .contact-list {
+                            width: 100%;
+                            height: 100vh;
+                            background-color: #2c3e50;
+                            color: white;
+                            overflow-y: auto;
+                        }
+                        .contact-list div {
+                            padding: 15px;
+                            cursor: pointer;
+                            border-bottom: 1px solid #34495e;
+                        }
+                        .contact-list div:hover {
+                            background-color: #34495e;
+                        }
+                    </style>
+                    <div class="contact-list"></div>
+                `;
+
+                this.contacts = [
+                    { id: 1, name: 'Alice' },
+                    { id: 2, name: 'Bob' },
+                    { id: 3, name: 'Charlie' }
+                ];
+
+                this.contactList = this.shadowRoot.querySelector('.contact-list');
+            }
+
+            connectedCallback() {
+                this.loadContacts();
+            }
+
+            loadContacts() {
+                this.contacts.forEach(contact => {
+                    const contactElement = document.createElement('div');
+                    contactElement.textContent = contact.name;
+                    contactElement.addEventListener('click', () => this.openChat(contact));
+                    this.contactList.appendChild(contactElement);
+                });
+            }
+
+            openChat(contact) {
+                this.dispatchEvent(new CustomEvent('open-chat', {
+                    detail: contact,
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+        }
+
+        customElements.define('contact-list', ContactList);
+
+        class ChatInput extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.shadowRoot.innerHTML = `
+            <style>
+                .input-container {
+                    display: flex;
+                }
+                input {
+                    flex: 1;
+                    padding: 10px;
+                    border: none;
+                    border-top: 1px solid #ccc;
+                    border-bottom-left-radius: 10px;
+                    box-sizing: border-box;
+                }
+                button {
+                    padding: 10px;
+                    border: none;
+                    border-top: 1px solid #ccc;
+                    background-color: #3498db;
+                    color: white;
+                    border-bottom-right-radius: 10px;
+                    cursor: pointer;
+                }
+                button:hover {
+                    background-color: #2980b9;
+                }
+            </style>
+            <div class="input-container">
+                <input type="text" placeholder="Type a message...">
+                <button>Send</button>
+            </div>
+        `;
+
+                this.inputElement = this.shadowRoot.querySelector('input');
+                this.shadowRoot.querySelector('button').addEventListener('click', () => this.sendMessage());
+                this.inputElement.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+            }
+
+            sendMessage() {
+                const message = this.inputElement.value.trim();
+                if (message) {
+                    this.dispatchEvent(new CustomEvent('new-message', {
+                        detail: message,
+                        bubbles: true,
+                        composed: true
+                    }));
+                    this.inputElement.value = '';
+                    this.inputElement.focus();
+                }
+            }
+        }
+
+        customElements.define('login-page', LoginPage);
+        customElements.define('register-page', RegisterPage);
+        customElements.define('chat-app', ChatApp);
+        customElements.define('chat-window', ChatWindow);
+        customElements.define('chat-input', ChatInput);
+
+    </script>
+</body>
+
+</html>

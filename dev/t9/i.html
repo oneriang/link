@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Swiper with Dynamic Slides</title>
+    <style>
+        :host {
+            display: block;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            /* 设置为屏幕高度 */
+            overflow: hidden;
+        }
+
+        .slides-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+            /* 设置为100%高度 */
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            /* 设置为100%高度 */
+            box-sizing: border-box;
+            background: #eee;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .custom-swiper-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .custom-swiper-button.prev {
+            left: 10px;
+        }
+
+        .custom-swiper-button.next {
+            right: 10px;
+        }
+
+        .nav-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            width: 20px;
+            /* 增加按钮宽度 */
+            height: 20px;
+            /* 增加按钮高度 */
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .nav-button.active {
+            background: #fff;
+        }
+
+        .nav-button img {
+            width: 12px;
+            /* 图标宽度 */
+            height: 12px;
+            /* 图标高度 */
+        }
+    </style>
+</head>
+
+<body>
+    <custom-swiper>
+        <div class="slide">Slide 1</div>
+        <div class="slide">Slide 2</div>
+        <div class="slide">Slide 3</div>
+    </custom-swiper>
+
+    <button id="add-slide">Add Slide</button>
+
+    <script>
+
+        class CustomSwiper extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                this.currentSlide = 0;
+                this.startX = 0;
+                this.currentX = 0;
+                this.isDragging = false;
+
+                const container = document.createElement('div');
+                container.classList.add('slides-container');
+
+                const slot = document.createElement('slot');
+                slot.addEventListener('slotchange', () => {
+                    this.slides = this.shadowRoot.querySelector('slot').assignedElements();
+                    this.createNavigation();
+                    this.updateSlides();
+                });
+
+                container.appendChild(slot);
+
+                const prevButton = document.createElement('button');
+                prevButton.textContent = 'Prev';
+                prevButton.classList.add('custom-swiper-button', 'prev');
+                prevButton.addEventListener('click', () => this.prevSlide());
+
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next';
+                nextButton.classList.add('custom-swiper-button', 'next');
+                nextButton.addEventListener('click', () => this.nextSlide());
+
+                this.navContainer = document.createElement('div');
+                this.navContainer.classList.add('nav-container');
+
+                this.shadowRoot.append(container, prevButton, nextButton, this.navContainer);
+
+                const style = document.createElement('style');
+                style.textContent = `
+            :host {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 100vh; /* 设置为屏幕高度 */
+                overflow: hidden;
+            }
+            .slides-container {
+                display: flex;
+                transition: transform 0.5s ease-in-out;
+                height: 100%; /* 设置为100%高度 */
+            }
+            .slide {
+                min-width: 100%;
+                height: 100%; /* 设置为100%高度 */
+                box-sizing: border-box;
+                background: #eee;
+                padding: 20px;
+                text-align: center;
+            }
+            .custom-swiper-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0, 0, 0, 0.5);
+                color: #fff;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+            }
+            .custom-swiper-button.prev {
+                left: 10px;
+            }
+            .custom-swiper-button.next {
+                right: 10px;
+            }
+            .nav-container {
+                position: absolute;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                gap: 10px;
+            }
+            .nav-button {
+                width: 32px;  /* 增加按钮宽度 */
+                height: 32px; /* 增加按钮高度 */
+                border-radius: 50%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            .nav-button.active {
+                background: #fff;
+            }
+            .nav-button img {
+                width: 24px; /* 图标宽度 */
+                height: 24px; /* 图标高度 */
+            }
+        `;
+
+                this.shadowRoot.appendChild(style);
+
+                // 添加事件监听器
+                container.addEventListener('mousedown', this.onPointerDown.bind(this));
+                container.addEventListener('mousemove', this.onPointerMove.bind(this));
+                container.addEventListener('mouseup', this.onPointerUp.bind(this));
+                container.addEventListener('mouseleave', this.onPointerUp.bind(this));
+
+                container.addEventListener('touchstart', this.onPointerDown.bind(this));
+                container.addEventListener('touchmove', this.onPointerMove.bind(this));
+                container.addEventListener('touchend', this.onPointerUp.bind(this));
+                container.addEventListener('touchcancel', this.onPointerUp.bind(this));
+            }
+
+            connectedCallback() {
+                this.updateSlides();
+            }
+
+            updateSlides() {
+                const container = this.shadowRoot.querySelector('.slides-container');
+                container.style.transition = 'transform 0.5s ease-in-out';
+                container.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+
+                this.updateNavButtons();
+            }
+
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                } else {
+                    this.currentSlide = this.slides.length - 1;
+                }
+                this.updateSlides();
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.slides.length - 1) {
+                    this.currentSlide++;
+                } else {
+                    this.currentSlide = 0;
+                }
+                this.updateSlides();
+            }
+
+            onPointerDown(event) {
+                this.isDragging = true;
+                this.startX = event.clientX || event.touches[0].clientX;
+                this.currentX = this.startX;
+
+                const container = this.shadowRoot.querySelector('.slides-container');
+                container.style.transition = 'none';
+            }
+
+            onPointerMove(event) {
+                if (!this.isDragging) return;
+                this.currentX = event.clientX || (event.touches && event.touches[0].clientX);
+                const dx = this.currentX - this.startX;
+                const container = this.shadowRoot.querySelector('.slides-container');
+                container.style.transform = `translateX(calc(-${this.currentSlide * 100}% + ${dx}px))`;
+            }
+
+            onPointerUp(event) {
+                if (!this.isDragging) return;
+                this.isDragging = false;
+                const dx = this.currentX - this.startX;
+                const threshold = this.clientWidth / 4;
+
+                if (dx > threshold) {
+                    this.prevSlide();
+                } else if (dx < -threshold) {
+                    this.nextSlide();
+                } else {
+                    this.updateSlides();
+                }
+            }
+
+            createNavigation() {
+                this.navContainer.innerHTML = '';
+                this.slides.forEach((_, index) => {
+                    const navButton = document.createElement('div');
+                    navButton.classList.add('nav-button');
+                    if (index === this.currentSlide) {
+                        navButton.classList.add('active');
+                    }
+                    const icon = document.createElement('img');
+                    icon.src = 'account.svg'; // 替换为实际图标路径
+                    navButton.appendChild(icon);
+                    navButton.addEventListener('click', () => this.goToSlide(index));
+                    this.navContainer.appendChild(navButton);
+                });
+            }
+
+            updateNavButtons() {
+                const navButtons = this.shadowRoot.querySelectorAll('.nav-button');
+                navButtons.forEach((button, index) => {
+                    button.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+
+            goToSlide(index) {
+                this.currentSlide = index;
+                this.updateSlides();
+            }
+
+            addSlide(content) {
+                const newSlide = document.createElement('div');
+                newSlide.classList.add('slide');
+                newSlide.innerHTML = content;
+                this.appendChild(newSlide);
+                this.slides = this.shadowRoot.querySelector('slot').assignedElements();
+                this.createNavigation();
+                this.updateSlides();
+            }
+        }
+
+        customElements.define('custom-swiper', CustomSwiper);
+
+        document.getElementById('add-slide').addEventListener('click', () => {
+            const swiper = document.querySelector('custom-swiper');
+            const newSlideNumber = swiper.slides.length + 1;
+            swiper.addSlide(`Slide ${newSlideNumber}`);
+        });
+
+    </script>
+</body>
+
+</html>

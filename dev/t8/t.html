@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Component Example</title>
+</head>
+<body>
+    <my-greeting id="greeting" name="ChatGPT"></my-greeting>
+
+<button id="changeNameButton">Change Name</button>
+
+    <script>
+        document.getElementById('changeNameButton').addEventListener('click', () => {
+            const greetingElement = document.getElementById('greeting');
+            greetingElement.setAttribute('name', 'OpenAI');
+        });
+    </script>
+    
+    <script>
+        
+        // 定义一个面向对象的类
+class Greeting extends HTMLElement {
+    constructor() {
+        super(); // 必须首先调用super
+        this.attachShadow({ mode: 'open' }); // Attach shadow DOM
+    }
+
+    // 监视 name 属性的变化
+    static get observedAttributes() {
+        return ['name'];
+    }
+
+    // 当属性变化时调用
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'name') {
+            this.render();
+        }
+    }
+
+    // 组件首次连接到文档DOM时调用
+    connectedCallback() {
+        this.render();
+    }
+
+    // 渲染方法
+    render() {
+        const name = this.getAttribute('name') || 'World';
+        this.shadowRoot.innerHTML = `
+            <style>
+                .greeting {
+                    font-family: Arial, sans-serif;
+                    color: blue;
+                }
+            </style>
+            <div class="greeting">Hello, ${name}!</div>
+        `;
+    }
+}
+
+// 注册自定义元素
+customElements.define('my-greeting', Greeting);
+
+    </script>
+    
+</body>
+</html>
